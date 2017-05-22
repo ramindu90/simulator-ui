@@ -1,0 +1,83 @@
+<form class="form-horizontal" role="form" id="config_{{dynamicId}}">
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Execution Plan Name<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-4">
+            <select id="executionPlanName_{{dynamicId}}" name="executionPlanName" class="form-control"
+                    onchange="displayStreamNames(this.value)">
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Stream Name<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-4">
+            <select id="streamName_{{dynamicId}}" name="streamName" class="form-control" onchange="displayAttributes(this.value)">
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Data Source Location<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" id="dataSourceLocation_{{dynamicId}}"  name="dataSourceLocation" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Driver<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-8">
+            <input type="text" class="form-control" id="driver_{{dynamicId}}" name="driver" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Username<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="username_{{dynamicId}}" name="username" required>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Password<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-4">
+            <input type="password" class="form-control" id="password_{{dynamicId}}" name="password" required>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default" onclick=loadDBData();>Test connection</button>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Table name<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-4">
+            <select id="tableName_{{dynamicId}}" name ="tableName" class="form-control" onchange="displayColumnNames(this.value)">
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12">
+            <label class="custom-radio">
+                <input type="radio" name="timestamp-option" value="timestampAttribute" required>
+                <span class="helper">Timestamp Attribute</span>
+                <select id="timestampAttribute_{{dynamicId}}" class="form-control" name = "timestampAttribute">
+                </select>
+            </label>
+            <label class="custom-radio">
+                <input type="radio" name="timestamp-option" value="timestampInterval">
+                <span class="helper">Timestamp Interval</span>
+                <input onkeypress="return (event.charCode === 8 || event.charCode === 0) ?
+                     null : event.charCode >= 48 && event.charCode <= 57" class="form-control" name="timestampInterval"
+                       value="1000" id="timestampInterval_{{dynamicId}}">
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Attributes</label>
+        <div class="col-sm-10" id="attributes_{{dynamicId}}">
+        </div>
+    </div>
+</form>

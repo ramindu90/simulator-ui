@@ -1,0 +1,68 @@
+<form role="form" id="config_{{dynamicId}}" data-type="csv" data-id="{{dynamicId}}">
+
+    <div class="form-group">
+        <label>Execution Plan Name<span class="requiredAstrix"> *</span></label>
+        <select id="executionPlanName_{{dynamicId}}" name="executionPlanName_{{dynamicId}}" class="form-control"
+                onchange="displayStreamNames(this.value)">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Stream Name<span class="requiredAstrix"> *</span></label>
+        <select id="streamName_{{dynamicId}}" name="streamName_{{dynamicId}}" class="form-control"
+                onchange="displayAttributes(this.value)">
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>CSV file<span class="requiredAstrix"> *</span></label>
+        <select id="fileName_{{dynamicId}}" name="fileName_{{dynamicId}}" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <div class="form-inline">
+            <div class="form-group">
+                <label class="custom-radio">
+                    <input type="radio" name="timestamp-option_{{dynamicId}}" value="timestampAttribute_{{dynamicId}}">
+                    <span class="helper">Timestamp Attribute</span>
+                    <input type="text" onkeypress="return (event.charCode === 8 || event.charCode === 0) ?
+                     null : event.charCode >= 48 && event.charCode <= 57" class="form-control"
+                           name="timestampAttribute_{{dynamicId}}" id="timestampAttribute_{{dynamicId}}" required>
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="custom-radio">
+                    <input type="radio" name="timestamp-option_{{dynamicId}}" value="timestampInterval_{{dynamicId}}">
+                    <span class="helper">Timestamp Interval</span>
+                    <input onkeypress="return (event.charCode === 8 || event.charCode === 0) ?
+                     null : event.charCode >= 48 && event.charCode <= 57" class="form-control"
+                           name="timestampInterval_{{dynamicId}}" value="1000" id="timestampInterval_{{dynamicId}}"
+                           required>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>CSV file is ordered by timestamp</label>
+        <div class="form-group">
+            <label class="custom-radio">
+                <input type="radio" id="isOrdered_true_{{dynamicId}}" name="isOrdered_{{dynamicId}}" value="true"
+                       required>
+                <span class="helper">Yes</span>
+            </label>
+            <label class="custom-radio">
+                <input type="radio" id="isOrdered_false_{{dynamicId}}" name="isOrdered_{{dynamicId}}" value="false"
+                       required>
+                <span class="helper">No</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Delimiter<span class="requiredAstrix"> *</span></label>
+        <input type="text" class="form-control" id="delimiter_{{dynamicId}}" name="delimiter_{{dynamicId}}" required>
+    </div>
+
+    <!--todo indices list-->
+</form>

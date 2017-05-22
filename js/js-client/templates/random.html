@@ -1,0 +1,34 @@
+<form class="form-horizontal" role="form" id="config_{{dynamicId}}">
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Execution Plan Name<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-4">
+            <select id="executionPlanName_{{dynamicId}}" name="executionPlanName" class="form-control"
+                    onchange="displayStreamNames(this.value)">
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Stream Name<span class="requiredAstrix"> *</span></label>
+        <div class="col-sm-4">
+            <select id="streamName_{{dynamicId}}" name="streamName" class="form-control" onchange="displayAttributes(this.value)">
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Timestamp</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" id="timestamp_{{dynamicId}}" name="timestamp"
+                   onkeypress="return (event.charCode === 8 || event.charCode === 0) ?
+                     null : event.charCode >= 48 && event.charCode <= 57">
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Attributes</label>
+        <div class="col-sm-10" id="attributes_{{dynamicId}}">
+        </div>
+    </div>
+</form>

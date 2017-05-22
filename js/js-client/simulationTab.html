@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c)  2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+  ~
+  ~ WSO2 Inc. licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file except
+  ~ in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simulator JS Client</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/theme-wso2.css">
+
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/templates.js"></script>
+    <script src="js/simulatorRestClient.js"></script>
+    <script src="js/simulator.js"></script>
+    <script src="js/main.js"></script>
+
+    <style>
+        div {
+            width: 400px;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="simulation">
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#singleEventConfigs">Single</a></li>
+        <li><a data-toggle="tab" href="#feedSimulationPanel">Feed</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div class="container tab-pane fade in active" id="singleEventConfigs">
+            <li><a href="#" id="btnAdd"><i class="icon-plus-sign-alt"></i> Add Tab</a></li>
+
+            <ul class="nav nav-tabs single_configs" id="singleEventConfigTab">
+            </ul>
+
+            <div class="tab-content" id = "singleEventConfigTabContent">
+            </div>
+        </div>
+
+        <div class="container tab-pane fade" id="feedSimulationPanel">
+            <button class="btn btn-primary" type="button" id="createFeedSimulation">
+                <i class="fw fw-add fw-helper fw-helper-circle-outline add-margin-right-1x"></i>
+                Create simulation
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

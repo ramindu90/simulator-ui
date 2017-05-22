@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--
+~   Copyright (c) WSO2 Inc. (http://wso2.com) All Rights Reserved.
+~
+~   Licensed under the Apache License, Version 2.0 (the "License");
+~   you may not use this file except in compliance with the License.
+~   You may obtain a copy of the License at
+~
+~        http://www.apache.org/licenses/LICENSE-2.0
+~
+~   Unless required by applicable law or agreed to in writing, software
+~   distributed under the License is distributed on an "AS IS" BASIS,
+~   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~   See the License for the specific language governing permissions and
+~   limitations under the License.
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>WSO2 Stream Processor</title>
+    <link href="images/favicon.png" rel="icon" type="image/png" sizes="16x16"/>
+    <!-- WSO2 Theme -->
+    <link href="css/theme-wso2.css" rel="stylesheet" type="text/css"/>
+
+    <!-- Font WSO2 CSS -->
+    <link href="libs/font-wso2_1.1.1/css/font-wso2.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/custom.css" rel="stylesheet" type="text/css"/>
+    <!--[if IE]>
+    <link href=css/theme-ie.min.css" rel="stylesheet" type="text/css"/>
+    <![endif]-->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="sticky-footer">
+
+<div class="sidebarTemp">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#singleEventConfigs" aria-controls="singleEventConfigs"
+                                                  role="tab" data-toggle="tab">Single</a>
+        </li>
+        <li role="presentation"><a href="#feedSimulationPanel" aria-controls="feedSimulationPanel" role="tab"
+                                   data-toggle="tab">Feed</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="singleEventConfigs">
+            <div class="content">
+                <h3>Single Simulation</h3>
+                <ul id="singleEventConfigTab" class="nav nav-tabs single_configs" role="tablist">
+                    <!--todo remove or change-->
+                    <li role="presentation" class="active"><a href="#singleEventContent_parent_1"
+                                                              id = "singleEventConfig_1"
+                                                              aria-controls="singleEventConfigs"
+                                                              role="tab" data-toggle="tab">S1</a></li>
+                    <li id="addSingleEventForm" role="presentation"><a>+</a></li>
+                </ul>
+                <div id="singleEventConfigTabContent" class="tab-content">
+                    <!--todo remove or change-->
+                    <div role="tabpanel" class="tab-pane active" id="singleEventContent_parent_1">
+                        <div class="content" id="singleEventContent_1">
+                            <form role="form" id="singleEventForm_1" class="singleEventForm">
+
+                                <div class="form-group">
+                                    <label for="single_executionPlanName_1">Execution Plan Name<span
+                                            class="requiredAstrix"> *</span></label>
+                                    <select id="single_executionPlanName_1"
+                                            name="single_executionPlanName_1" class="form-control">
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="single_streamName_1">Stream Name<span
+                                            class="requiredAstrix"> *</span></label>
+                                    <select id="single_streamName_1" name="single_streamName_1"
+                                            class="form-control">
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="single_timestamp_1">Timestamp</label>
+                                    <input type="text" class="form-control" id="single_timestamp_1"
+                                           name="single_timestamp_1">
+                                </div>
+
+                                <div class="form-group" id="single_attributes_1">
+
+                                </div>
+
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-default" id="single_submitConfig_1"
+                                            name="simulate">Simulate
+                                    </button>
+                                    <button type="button" class="btn btn-default"
+                                            id="single_deleteConfig_1">Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="feedSimulationPanel">
+
+            <div class="content">
+                <h3>Feed Simulation</h3>
+                <p>Has great platform knowledge. Need to send him on a QSP as a lead test.</p>
+                <p>Has been given Robbins Brothers account to cleanup and handle.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="libs/jquery_1.11.0/jquery-1.11.3.min.js"></script>
+<script src="js/jquery.validate.min.js"></script>
+<script src="libs/bootstrap_3.3.6/js/bootstrap.min.js"></script>
+<script src="js/theme-wso2.min.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/simulatorRestClient.js"></script>
+<script src="js/simulator.js"></script>
+<script src="js/main.js"></script>
+
+
+</body>
+</html>
