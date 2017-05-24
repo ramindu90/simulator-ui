@@ -50,3 +50,21 @@ a:hover, a:focus {
 .tab-content .content {
     min-height: 400px
 }
+
+/*simulator*/
+
+.optional{
+    color: rgb(147, 147, 147);
+}
+.ui-datepicker-trigger{
+    position: relative;
+    left: 7px;
+    height: 40px;
+}
+.hasDatepicker {
+    width: 85% !important;
+    display: inline !important;
+}
+.attribute-input {
+    display: inline !important;
+}

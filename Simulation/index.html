@@ -24,6 +24,9 @@
     <link href="images/favicon.png" rel="icon" type="image/png" sizes="16x16"/>
     <!-- WSO2 Theme -->
     <link href="css/theme-wso2.css" rel="stylesheet" type="text/css"/>
+    <!--Jquery UI-->
+    <link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css"/>
 
     <!-- Font WSO2 CSS -->
     <link href="libs/font-wso2_1.1.1/css/font-wso2.min.css" rel="stylesheet" type="text/css"/>
@@ -44,11 +47,16 @@
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active"><a href="#singleEventConfigs" aria-controls="singleEventConfigs"
-                                                  role="tab" data-toggle="tab">Single</a>
+        <li role="presentation" class="active">
+            <a href="#singleEventConfigs" aria-controls="singleEventConfigs" role="tab" data-toggle="tab">
+                Single
+            </a>
         </li>
-        <li role="presentation"><a href="#feedSimulationPanel" aria-controls="feedSimulationPanel" role="tab"
-                                   data-toggle="tab">Feed</a></li>
+        <li role="presentation">
+            <a href="#feedSimulationPanel" aria-controls="feedSimulationPanel" role="tab" data-toggle="tab">
+                Feed
+            </a>
+        </li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
@@ -56,52 +64,56 @@
             <div class="content">
                 <h3>Single Simulation</h3>
                 <ul id="singleEventConfigTab" class="nav nav-tabs single_configs" role="tablist">
-                    <!--todo remove or change-->
-                    <li role="presentation" class="active"><a href="#singleEventContent_parent_1"
-                                                              id = "singleEventConfig_1"
-                                                              aria-controls="singleEventConfigs"
-                                                              role="tab" data-toggle="tab">S1</a></li>
-                    <li id="addSingleEventForm" role="presentation"><a>+</a></li>
+                    <li role="presentation" class="active" id="single_ListItem_1">
+                        <a href="#singleEventContent_parent_1" id="singleEventConfig_1"
+                           aria-controls="singleEventConfigs" role="tab" data-toggle="tab">
+                            S1
+                        </a>
+                    </li>
+                    <li id="addSingleEventForm" role="presentation">
+                        <a>+</a>
+                    </li>
                 </ul>
                 <div id="singleEventConfigTabContent" class="tab-content">
-                    <!--todo remove or change-->
                     <div role="tabpanel" class="tab-pane active" id="singleEventContent_parent_1">
                         <div class="content" id="singleEventContent_1">
                             <form role="form" id="singleEventForm_1" class="singleEventForm">
 
                                 <div class="form-group">
-                                    <label for="single_executionPlanName_1">Execution Plan Name<span
-                                            class="requiredAstrix"> *</span></label>
+                                    <label for="single_executionPlanName_1">
+                                        Execution Plan Name<span class="requiredAstrix"> *</span>
+                                    </label>
                                     <select id="single_executionPlanName_1"
                                             name="single_executionPlanName_1" class="form-control">
                                     </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="single_streamName_1">Stream Name<span
-                                            class="requiredAstrix"> *</span></label>
+                                    <label for="single_streamName_1">
+                                        Stream Name<span class="requiredAstrix"> *</span>
+                                    </label>
                                     <select id="single_streamName_1" name="single_streamName_1"
                                             class="form-control">
                                     </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="single_timestamp_1">Timestamp</label>
+                                    <label for="single_timestamp_1">
+                                        Timestamp<span class="optional"> - optional</span>
+                                    </label>
                                     <input type="text" class="form-control" id="single_timestamp_1"
                                            name="single_timestamp_1">
                                 </div>
 
                                 <div class="form-group" id="single_attributes_1">
-
                                 </div>
 
+                                <div class="form-group row" id="single_runDebugButtons_1">
+                                </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-default" id="single_submitConfig_1"
-                                            name="simulate">Simulate
-                                    </button>
-                                    <button type="button" class="btn btn-default"
-                                            id="single_deleteConfig_1">Cancel
+                                    <button type="submit" class="btn btn-default" id="send_singleEvent_1" name="send">
+                                        Send
                                     </button>
                                 </div>
                             </form>
@@ -112,7 +124,6 @@
             </div>
         </div>
         <div role="tabpanel" class="tab-pane fade" id="feedSimulationPanel">
-
             <div class="content">
                 <h3>Feed Simulation</h3>
                 <p>Has great platform knowledge. Need to send him on a QSP as a lead test.</p>
@@ -124,6 +135,8 @@
 </div>
 <script src="libs/jquery_1.11.0/jquery-1.11.3.min.js"></script>
 <script src="js/jquery.validate.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/jquery-ui-timepicker-addon.js"></script>
 <script src="libs/bootstrap_3.3.6/js/bootstrap.min.js"></script>
 <script src="js/theme-wso2.min.js"></script>
 <script src="js/templates.js"></script>
