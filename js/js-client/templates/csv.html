@@ -2,15 +2,13 @@
 
     <div class="form-group">
         <label>Execution Plan Name<span class="requiredAstrix"> *</span></label>
-        <select id="executionPlanName_{{dynamicId}}" name="executionPlanName_{{dynamicId}}" class="form-control"
-                onchange="displayStreamNames(this.value)">
+        <select id="executionPlanName_{{dynamicId}}" name="executionPlanName_{{dynamicId}}" class="form-control">
         </select>
     </div>
 
     <div class="form-group">
         <label>Stream Name<span class="requiredAstrix"> *</span></label>
-        <select id="streamName_{{dynamicId}}" name="streamName_{{dynamicId}}" class="form-control"
-                onchange="displayAttributes(this.value)">
+        <select id="streamName_{{dynamicId}}" name="streamName_{{dynamicId}}" class="form-control">
         </select>
     </div>
 
@@ -25,19 +23,16 @@
                 <label class="custom-radio">
                     <input type="radio" name="timestamp-option_{{dynamicId}}" value="timestampAttribute_{{dynamicId}}">
                     <span class="helper">Timestamp Attribute</span>
-                    <input type="text" onkeypress="return (event.charCode === 8 || event.charCode === 0) ?
-                     null : event.charCode >= 48 && event.charCode <= 57" class="form-control"
-                           name="timestampAttribute_{{dynamicId}}" id="timestampAttribute_{{dynamicId}}" required>
+                    <input type="text" class="form-control" name="timestampAttribute_{{dynamicId}}"
+                           id="timestampAttribute_{{dynamicId}}" required>
                 </label>
             </div>
             <div class="form-group">
                 <label class="custom-radio">
                     <input type="radio" name="timestamp-option_{{dynamicId}}" value="timestampInterval_{{dynamicId}}">
                     <span class="helper">Timestamp Interval</span>
-                    <input onkeypress="return (event.charCode === 8 || event.charCode === 0) ?
-                     null : event.charCode >= 48 && event.charCode <= 57" class="form-control"
-                           name="timestampInterval_{{dynamicId}}" value="1000" id="timestampInterval_{{dynamicId}}"
-                           required>
+                    <input class="form-control" name="timestampInterval_{{dynamicId}}" value="1000"
+                           id="timestampInterval_{{dynamicId}}" required>
                 </label>
             </div>
         </div>

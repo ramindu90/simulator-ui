@@ -1,5 +1,5 @@
 var singleEventConfigCount = 1;
-
+var executionPlanDetailsMap = {};
 $(function () {
 
     jQuery.validator.addMethod("validateIntOrLong", function (value, element) {
@@ -149,22 +149,22 @@ $(function () {
     })
 
 
-    var newSource = $('#addNewSource');
     var totalSourceNum = 1;
-    var currentSourceNum = 1;
 
 
 // add new source for feed simulation
-    newSource.on('click', function () {
+    $('#addNewSource').on('click', function () {
         $('.collapse').collapse();
         var sourceType = $('#sources').val();
-        var sourcePanel = createConfigPanel(totalSourceNum, currentSourceNum, sourceType);
+        var numItems = $('div.feed-config').length + 1;
+        var sourcePanel = createConfigPanel(totalSourceNum, numItems, sourceType);
         $('#sourceConfigs').append(sourcePanel);
         var sourceForm = createSourceForm(sourceType, totalSourceNum);
         $('#panelBody_source_' + totalSourceNum).html(sourceForm);
+        loadExecutionPlanNames('executionPlanName_' + totalSourceNum);
+        // addSourceFormValidator();
         // console.log(document.getElementById('panelBody_source_' + totalSourceNum))
         totalSourceNum++;
-        currentSourceNum++;
         return false;
     });
 
@@ -172,12 +172,67 @@ $(function () {
         var buttonId = this.id;
         var panelId = buttonId.substring(7, buttonId.length);
         $('#' + panelId).remove();
-        currentSourceNum--;
         $('h4.source-title').each(function (i) {
             var type = $(this).data('type');
             $(this).text('Source ' + (i + 1) + ' ' + type);
         });
     });
+    // change stream names on change function of execution plan  - feed
+    $("#sourceConfigs").on('change', 'select[id^="executionPlanName_"]', function () {
+        var elementId = this.id;
+        var dynamicId = elementId.substring(18, elementId.length);
+        console.log(dynamicId)
+        var streamId = 'streamName_' + dynamicId;
+        var attributesId = 'attributes_' + dynamicId;
+        var executionPlanName = $(this).val();
+        $('#' + elementId + '_mode').html('mode : ' + self.executionPlanDetailsMap[executionPlanName])
+        // $('#' + attributesId).empty();
+        // self.removeRulesOfAttributes(dynamicId);
+        // $('#single_runDebugButtons_' + dynamicId).empty();
+        // $('#single_executionPlanStartMsg_' + dynamicId).empty();
+        if (self.executionPlanDetailsMap[executionPlanName] === 'FAULTY') {
+            $('#'+streamId).prop('disabled', true);
+            $('#single_timestamp_'+dynamicId).prop('disabled', true);
+            $('#single_sendEvent_'+dynamicId).prop('disabled', true);
+        } else {
+            $('#'+streamId).prop('disabled', false);
+            $('#single_timestamp_'+dynamicId).prop('disabled', false);
+            $('#single_sendEvent_' + dynamicId).prop('disabled', false);
+            Simulator.retrieveStreamNames(
+                $('#' + elementId).val(),
+                function (data) {
+                    self.refreshStreamList(streamId, data);
+                    $('#' + streamId).prop("selectedIndex", -1);
+                },
+                function (data) {
+                    console.log(data);
+                });
+            if (self.executionPlanDetailsMap[executionPlanName] === 'STOP') {
+                self.appendRunDebugButtons(dynamicId);
+                $('#single_executionPlanStartMsg_' + dynamicId).html('Start execution plan \'' +
+                    executionPlanName + '\' in either \'run\' or \'debug\' mode.')
+                $('#single_sendEvent_' + dynamicId).prop('disabled', true);
+            }
+        }
+    });
+
+    // change stream names on change function of execution plan name - feed config
+    $("#singleEventConfigs").on('change', 'select[id^="single_streamName_"]', function () {
+        var elementId = this.id;
+        var dynamicId = elementId.substring(18, elementId.length);
+        Simulator.retrieveStreamAttributes(
+            $('#single_executionPlanName_' + dynamicId).val(),
+            $('#single_streamName_' + dynamicId).val(),
+            function (data) {
+                self.removeRulesOfAttributes(dynamicId);
+                self.refreshAttributesList(dynamicId, data);
+                self.addRulesForAttributes(dynamicId);
+            },
+            function (data) {
+                console.log(data);
+            });
+    });
+
 });
 
 function addSingleEventConfig() {
@@ -227,18 +282,6 @@ function addSingleEventFormValidator(formId) {
     });
 }
 
-function loadExecutionPlanNames(elementId) {
-    Simulator.retrieveExecutionPlanNames(
-        function (data) {
-            refreshExecutionPlanList(elementId, data);
-            $('#' + elementId).prop("selectedIndex", -1);
-        },
-        function (data) {
-            console.log(data);
-        }
-    );
-
-}
 function removeRulesForAttributes(elementId) {
     $('.single-event-attribute-' + elementId).each(
         function () {
@@ -378,7 +421,7 @@ function generateAttributes(attributes) {
 function createConfigPanel(totalSourceNum, currentSourceNum, sourceType) {
     var panel =
         '<div class="panel panel-default" id = "sourceConfig_{{dynamicId}}"> ' +
-        '    <div class="panel-heading" role="tab" id="source_{{dynamicId}}" data-toggle="collapse"' +
+        '    <div class="panel-heading feed-config" role="tab" id="source_{{dynamicId}}" data-toggle="collapse"' +
         '     href="#sourceDes_{{dynamicId}}" aria-controls="sourceDes_{{dynamicId}}"> ' +
         '           <h4 class="source-title panel-title" data-type="{{sourceType}}">' +
         '               Source {{currentSourceNum}} - {{sourceType}}' +
@@ -417,6 +460,34 @@ $(function () {
         console.log(formValues);
         e.preventDefault();
     });
-
 });
+
+
+// load execution plan names to form
+function loadExecutionPlanNames(elementId) {
+    Simulator.retrieveExecutionPlanNames(
+        function (data) {
+            createExecutionPlanMap(data);
+            refreshExecutionPlanList(elementId, Object.keys(executionPlanDetailsMap));
+            $('#' + elementId).prop("selectedIndex", -1);
+        },
+        function (data) {
+            console.log(data);
+        }
+    );
+
+}
+
+// create a map containing execution plan name
+function createExecutionPlanMap(data) {
+    for (var i = 0; i < data.length; i++) {
+        executionPlanDetailsMap[data[i]['executionPlaName']] = data[i]['mode'];
+    }
+}
+// create the execution plan name drop down
+function refreshExecutionPlanList(elementId, executionPlanNames) {
+    var newExecutionPlans = generateOptions(executionPlanNames);
+    $('#' + elementId).html(newExecutionPlans);
+}
+
 

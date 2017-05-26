@@ -47,23 +47,37 @@ $(function () {
         var dynamicId = elementId.substring(25, elementId.length);
         var streamId = 'single_streamName_' + dynamicId;
         var attributesId = 'single_attributes_' + dynamicId;
-        if (executionPlanDetailsMap[$(this).val()] === 'INACTIVE') {
-            appendRunDebugButtons(dynamicId);
-            $('#send_singleEvent_' + dynamicId).prop('disabled', true);
+        var executionPlanName = $(this).val();
+        $('#' + elementId + '_mode').html('mode : ' + self.executionPlanDetailsMap[executionPlanName])
+        $('#' + attributesId).empty();
+        self.removeRulesOfAttributes(dynamicId);
+        $('#single_runDebugButtons_' + dynamicId).empty();
+        $('#single_executionPlanStartMsg_' + dynamicId).empty();
+        if (self.executionPlanDetailsMap[executionPlanName] === 'FAULTY') {
+            $('#'+streamId).prop('disabled', true);
+            $('#single_timestamp_'+dynamicId).prop('disabled', true);
+            $('#single_sendEvent_'+dynamicId).prop('disabled', true);
+        } else {
+            $('#'+streamId).prop('disabled', false);
+            $('#single_timestamp_'+dynamicId).prop('disabled', false);
+            $('#single_sendEvent_' + dynamicId).prop('disabled', false);
+            Simulator.retrieveStreamNames(
+                $('#' + elementId).val(),
+                function (data) {
+                    self.refreshStreamList(streamId, data);
+                    $('#' + streamId).prop("selectedIndex", -1);
+                },
+                function (data) {
+                    console.log(data);
+                });
+            if (self.executionPlanDetailsMap[executionPlanName] === 'STOP') {
+                self.appendRunDebugButtons(dynamicId);
+                $('#single_executionPlanStartMsg_' + dynamicId).html('Start execution plan \'' +
+                    executionPlanName + '\' in either \'run\' or \'debug\' mode.')
+                $('#single_sendEvent_' + dynamicId).prop('disabled', true);
+            }
         }
-        Simulator.retrieveStreamNames(
-            $('#' + elementId).val(),
-            function (data) {
-                refreshStreamList(streamId, data);
-                $('#' + streamId).prop("selectedIndex", -1);
-                $('#' + attributesId).empty();
-                removeRulesOfAttributes(dynamicId);
-            },
-            function (data) {
-                console.log(data);
-            });
     });
-
     // change stream names on change function of execution plan name
     $("#singleEventConfigs").on('change', 'select[id^="single_streamName_"]', function () {
         var elementId = this.id;
@@ -307,6 +321,8 @@ function appendRunDebugButtons(dynamicId) {
         '<div class="col-xs-6 col-md-6">' +
         '   <button type="button" class="btn btn-default pull-right" id="single_start_{{dynamicId}}"' +
         '    name="single_start_{{dynamicId}}">Start</button>' +
+        '</div>' +
+        '<div id="single_executionPlanStartMsg_{{dynamicId}}">' +
         '</div>';
     var section = runDebugButtons.replaceAll('{{dynamicId}}', dynamicId);
     $('#single_runDebugButtons_' + dynamicId).html(section);
