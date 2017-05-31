@@ -1,0 +1,85 @@
+<div class="sourceConfigForm" id="sourceConfig_{{dynamicId}}" data-type="db" data-id="{{dynamicId}}">
+
+    <div class="form-group">
+        <label class="labelSize300Px">
+            Execution Plan Name<span class="requiredAstrix"> *</span>
+            <select id="executionPlanName_{{dynamicId}}" name="executionPlanName_{{dynamicId}}" class="form-control">
+            </select>
+        </label>
+        <div id="executionPlanName_{{dynamicId}}_mode">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="labelSize300Px">
+            Stream Name<span class="requiredAstrix"> *</span>
+            <select id="streamName_{{dynamicId}}" name="streamName_{{dynamicId}}" class="form-control">
+            </select>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label class="labelSize600Px">
+            Data Source Location<span class="requiredAstrix"> *</span>
+            <input type="text" class="form-control" id="dataSourceLocation_{{dynamicId}}"
+                   name="dataSourceLocation_{{dynamicId}}">
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label class="labelSize600Px">
+            Driver<span class="requiredAstrix"> *</span>
+            <input type="text" class="form-control" id="driver_{{dynamicId}}" name="driver_{{dynamicId}}">
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label class="labelSize300Px">
+            Username<span class="requiredAstrix"> *</span>
+            <input type="text" class="form-control" id="username_{{dynamicId}}" name="username_{{dynamicId}}">
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label class="labelSize300Px">Password<span class="requiredAstrix"> *</span>
+            <input type="password" class="form-control" id="password_{{dynamicId}}" name="password_{{dynamicId}}">
+        </label>
+        <button type="button" class="btn btn-default" id="loadDbConnection_{{dynamicId}}">
+            Test connection
+        </button>
+    </div>
+
+    <div class="form-group">
+        <label class="labelSize300Px">
+            Table name<span class="requiredAstrix"> *</span>
+            <select id="tableName_{{dynamicId}}" name="tableName_{{dynamicId}}" class="form-control">
+            </select>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-12">
+            <label class="custom-radio labelSize200Px">
+                <input type="radio" name="timestamp-option_{{dynamicId}}"
+                       id="timestamp-option_{{dynamicId}}_timestampAttribute" required>
+                <span class="helper">Timestamp Attribute</span>
+                <select id="timestampAttribute_{{dynamicId}}" class="form-control"
+                        name="timestampAttribute_{{dynamicId}}">
+                </select>
+            </label>
+            <label class="custom-radio labelSize200Px">
+                <input type="radio" name="timestamp-option_{{dynamicId}}"
+                       id="timestamp-option_{{dynamicId}}_timestampInterval">
+                <span class="helper">Timestamp Interval</span>
+                <input class="form-control" name="timestampInterval_{{dynamicId}}"
+                       value="1000" id="timestampInterval_{{dynamicId}}">
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group" id="attributesDiv_{{dynamicId}}">
+    </div>
+
+    <div class="form-group" id="runDebugButtons_{{dynamicId}}">
+    </div>
+</div>

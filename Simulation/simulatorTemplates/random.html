@@ -1,0 +1,40 @@
+
+<div class="sourceConfigForm" id="sourceConfig_{{dynamicId}}" data-type="random" data-id="{{dynamicId}}">
+
+    <div class="form-group">
+        <label>Execution Plan Name<span class="requiredAstrix"> *</span></label>
+        <div>
+            <select id="executionPlanName_{{dynamicId}}" name="executionPlanName" class="form-control"
+                    onchange="displayStreamNames(this.value)">
+            </select>
+            <div id ="executionPlanName_{{dynamicId}}_mode">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Stream Name<span class="requiredAstrix"> *</span></label>
+        <div>
+            <select id="streamName_{{dynamicId}}" name="streamName" class="form-control" onchange="displayAttributes(this.value)">
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Timestamp</label>
+        <div>
+            <input type="text" class="form-control" id="timestamp_{{dynamicId}}" name="timestamp"
+                   onkeypress="return (event.charCode === 8 || event.charCode === 0) ?
+                     null : event.charCode >= 48 && event.charCode <= 57">
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label>Attributes</label>
+        <div id="attributes_{{dynamicId}}">
+        </div>
+    </div>
+
+    <div class="form-group" id="runDebugButtons_{{dynamicId}}">
+    </div>
+</div>>

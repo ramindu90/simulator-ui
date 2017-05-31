@@ -61,10 +61,58 @@ a:hover, a:focus {
     left: 7px;
     height: 40px;
 }
-/*.hasDatepicker {*/
-    /*width: 85% !important;*/
-    /*display: inline !important;*/
-/*}*/
+.hasDatepicker {
+    width: 85% !important;
+    display: inline !important;
+}
 .attribute-input {
     display: inline !important;
+}
+
+.table > thead > tr > th {
+    border-bottom: none !important;
+}
+
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    border-top: none !important;
+}
+
+.table > tbody > tr > td > label, .table > tbody > tr > th > label, .table > tfoot > tr > td > label, .table > tfoot > tr > th > label, .table > thead > tr > td > label, .table > thead > tr > th > label {
+    color: #fefefe;
+    font-weight: 700;
+    font-size: 14px;
+    width: 100%;
+}
+
+.align-middle {
+    vertical-align: middle !important;
+    margin: auto !important;
+    float: none !important;
+    padding-top: 15px !important;
+    text-align: center;
+}
+
+/*feed*/
+
+.feedSize1 {
+    width: 1000px !important;
+}
+
+.feedSize2 {
+    width: 400px !important;
+}
+
+.labelSize100Px {
+    width: 100px !important;
+}
+
+.labelSize200Px {
+    width: 200px !important;
+}
+
+.labelSize300Px {
+    width: 300px !important;
+}
+.labelSize600Px {
+    width: 600px !important;
 }
