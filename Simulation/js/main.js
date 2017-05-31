@@ -422,12 +422,59 @@ $(function () {
             Simulator.testDatabaseConnectivity(
                 JSON.stringify(connectionDetails),
                 function (data) {
-                    console.log(data);
+                    refreshTableNamesFromDataSource(connectionDetails, dynamicId);
                 },
                 function (msg) {
-                    console.error(msg);
+                    console.error(msg['responseText']);
                 }
-            )
+            );
+        }
+    });
+
+    // upload a new csv file
+    $("#sourceConfigs").on('change', 'select[id^="tableName_"]', function () {
+        var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
+        var dataSourceLocation = $('#dataSourceLocation_' + dynamicId).val();
+        if (dataSourceLocation === null || dataSourceLocation.length === 0) {
+            console.error("Datasource location is required to test database connection")
+        }
+        var driverName = $('#driver_' + dynamicId).val();
+        if (driverName === null || driverName.length === 0) {
+            console.error("Driver is required to retrieve columns list")
+        }
+        var username = $('#username_' + dynamicId).val();
+        if (username === null || username.length === 0) {
+            console.error("Driver is required to retrieve columns list")
+        }
+        var password = $('#password_' + dynamicId).val();
+        if (password === null || password.length === 0) {
+            console.error("Password is required to retrieve columns list")
+        }
+        var tableName = $(this).val();
+        if (tableName === null || tableName.length === 0) {
+            console.error("Table name is required to retrieve columns list")
+        }
+
+        if (dataSourceLocation !== null && dataSourceLocation.length > 0
+            && driverName !== null && driverName.length > 0
+            && username !== null && username.length > 0
+            && password !== null && password.length > 0
+            && tableName !== null && tableName.length > 0) {
+            var connectionDetails = {};
+            connectionDetails['driver'] = driverName;
+            connectionDetails['dataSourceLocation'] = dataSourceLocation;
+            connectionDetails['username'] = username;
+            connectionDetails['password'] = password;
+            Simulator.retrieveColumnNames(
+                JSON.stringify(connectionDetails),
+                tableName,
+                function (data) {
+                    refreshColumnNamesList(data);
+                },
+                function (msg) {
+                    console.error(msg['responseText']);
+                }
+            );
         }
     });
 });
@@ -1044,6 +1091,9 @@ refreshAttributesListOfSource = function (dataType, dynamicId, streamAttributes)
     $('#attributesDiv_' + dynamicId).html(generateAttributesDivForSource(dataType, dynamicId));
     var attributes = generateAttributesListForSource(dataType, dynamicId, streamAttributes);
     $('#attributes_' + dynamicId).html(attributes);
+    if (dataType === 'db') {
+        refre
+    }
 };
 
 //generate attribute div for inputs
@@ -1085,7 +1135,7 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
         '<div>' +
         '   <label for ="attributes_{{dynamicId}}_{{attributeName}}">' +
         '        {{attributeName}}({{attributeType}})' +
-        '       <input type="text" class="form-control feed-attribute-{{dynamicId}}"' +
+        '       <input type="text" class="form-control feed-attribute-csv-{{dynamicId}}"' +
         '       name="attributes_{{dynamicId}}_{{attributeName}}" ' +
         '       id="attributes_{{dynamicId}}_{{attributeName}}" data-id="{{dynamicId}}"' +
         '       data-type ="{{attributeType}}">' +
@@ -1097,7 +1147,7 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
         '       {{attributeName}}({{attributeType}})' +
         '       <select id="attributes_{{dynamicId}}_{{attributeName}}"' +
         '       name="attributes_{{dynamicId}}_{{attributeName}}" ' +
-        '       class="form-control feed-attribute-{{dynamicId}} database-columns-{{dynamicId}}" ' +
+        '       class="form-control feed-attribute-db-{{dynamicId}}" ' +
         '       data-id="{{dynamicId}}" ' +
         '       data-type="{{attributeType}}"> ' +
         '       </select>' +
@@ -1109,7 +1159,7 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
         '       {{attributeName}}({{attributeType}})' +
         '       <select id="attributes_{{dynamicId}}_{{attributeName}}"' +
         '       name="attributes_{{dynamicId}}_{{attributeName}}" ' +
-        '       class="form-control feed-attribute-{{dynamicId}}" data-id="{{dynamicId}}"' +
+        '       class="form-control feed-attribute-random-{{dynamicId}}" data-id="{{dynamicId}}"' +
         '        data-type ="{{attributeType}}"> ' +
         '          <option>Custom data based</option>' +
         '          <option>Primitive based</option>' +
@@ -1140,3 +1190,28 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
     }
     return result.replaceAll('{{dynamicId}}', dynamicId);
 };
+
+
+//generate input fields for attributes
+refreshTableNamesFromDataSource = function (connectionDetails, dynamicId) {
+    Simulator.retrieveTableNames(
+        JSON.stringify(connectionDetails),
+        function (data) {
+            $('#tableName_' + dynamicId).html(generateOptions(data));
+            $('#tableName_' + dynamicId).prop("selectedIndex", -1);
+        },
+        function (msg) {
+            console.error(msg['responseText']);
+        }
+    )
+};
+
+//generate input fields for attributes
+refreshColumnNamesList = function (columnNames, dynamicId) {
+    var columnsList = generateOptions(columnNames);
+    $('.feed-attribute-db-' + dynamicId).each(function () {
+        console.log(this)
+    })
+};
+
+

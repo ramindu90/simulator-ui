@@ -22,27 +22,31 @@
         <label class="labelSize600Px">
             Data Source Location<span class="requiredAstrix"> *</span>
             <input type="text" class="form-control" id="dataSourceLocation_{{dynamicId}}"
-                   name="dataSourceLocation_{{dynamicId}}">
+                   name="dataSourceLocation_{{dynamicId}}"
+            value="jdbc:mysql://localhost:3306/DatabaseFeedSimulation">
         </label>
     </div>
 
     <div class="form-group">
         <label class="labelSize600Px">
             Driver<span class="requiredAstrix"> *</span>
-            <input type="text" class="form-control" id="driver_{{dynamicId}}" name="driver_{{dynamicId}}">
+            <input type="text" class="form-control" id="driver_{{dynamicId}}" name="driver_{{dynamicId}}"
+            value="com.mysql.jdbc.Driver">
         </label>
     </div>
 
     <div class="form-group">
         <label class="labelSize300Px">
             Username<span class="requiredAstrix"> *</span>
-            <input type="text" class="form-control" id="username_{{dynamicId}}" name="username_{{dynamicId}}">
+            <input type="text" class="form-control" id="username_{{dynamicId}}" name="username_{{dynamicId}}"
+            value="root">
         </label>
     </div>
 
     <div class="form-group">
         <label class="labelSize300Px">Password<span class="requiredAstrix"> *</span>
-            <input type="password" class="form-control" id="password_{{dynamicId}}" name="password_{{dynamicId}}">
+            <input type="password" class="form-control" id="password_{{dynamicId}}" name="password_{{dynamicId}}"
+            value="root">
         </label>
         <button type="button" class="btn btn-default" id="loadDbConnection_{{dynamicId}}">
             Test connection

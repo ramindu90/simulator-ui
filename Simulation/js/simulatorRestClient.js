@@ -308,7 +308,8 @@ var Simulator = (function () {
                 async: true,
                 url: self.simulatorUrl + "/connectToDatabase",
                 type: self.HTTP_POST,
-                contentType: 'application/json; charset=UTF-8',
+                dataType : "json",
+                contentType: "application/json; charset=utf-8",
                 data: connectionDetails,
                 success: function (data) {
                     if (typeof successCallback === 'function')
@@ -331,7 +332,8 @@ var Simulator = (function () {
                 async: true,
                 url: self.simulatorUrl + "/connectToDatabase/retrieveTableNames",
                 type: self.HTTP_POST,
-                contentType: 'application/json; charset=UTF-8',
+                dataType : "json",
+                contentType: "application/json; charset=utf-8",
                 data: connectionDetails,
                 success: function (data) {
                     if (typeof successCallback === 'function')
@@ -358,7 +360,8 @@ var Simulator = (function () {
                 async: true,
                 url: self.simulatorUrl + "/connectToDatabase/" + tableName + "/retrieveColumnNames",
                 type: self.HTTP_POST,
-                contentType: 'application/json; charset=UTF-8',
+                dataType : "json",
+                contentType: "application/json; charset=utf-8",
                 data: connectionDetails,
                 success: function (data) {
                     if (typeof successCallback === 'function')
