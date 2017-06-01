@@ -116,3 +116,15 @@ a:hover, a:focus {
 .labelSize600Px {
     width: 600px !important;
 }
+
+.db-connection-success{
+    color: #0fcd10;
+}
+
+.db-connection-failure{
+    color: #d2111a;
+}
+
+.db-connection-connecting{
+    color: #939393;
+}

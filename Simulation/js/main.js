@@ -154,7 +154,7 @@ $(function () {
                 $('#' + inputId + '_false').prop('checked', false);
                 $('#' + inputId + '_false').prop('disabled', true);
             }
-            removeRuleOfAttribute($('#' + inputId));
+            removeRulesOfAttribute($('#' + inputId));
         } else {
             if ($('#' + inputId).is(':text')) {
                 $('#' + inputId).prop('disabled', false);
@@ -253,7 +253,7 @@ $(function () {
         if (sourceType === 'CSV file') {
             loadCSVFileNames(totalSourceNum);
         }
-        appendSourceConfigValidation(sourceType, totalSourceNum);
+        addSourceConfigValidation(sourceType, totalSourceNum);
         totalSourceNum++;
         return false;
     });
@@ -273,11 +273,10 @@ $(function () {
         var elementId = this.id;
         var dynamicId = elementId.substring(18, elementId.length);
         var streamId = 'streamName_' + dynamicId;
-        // var attributesId = 'attributes_' + dynamicId;
         var executionPlanName = $(this).val();
         var sourceType = $(this).closest('div.sourceConfigForm').data('type');
-        $('#' + elementId + '_mode').empty();
         $('#' + elementId + '_mode').html('mode : ' + executionPlanDetailsMap[executionPlanName]);
+        $('#attributesDiv_' + dynamicId).empty();
         $('#runDebugButtons_' + dynamicId).empty();
         if (executionPlanDetailsMap[executionPlanName] === 'FAULTY') {
             disableSourceConfigInputFields(sourceType, dynamicId);
@@ -305,15 +304,29 @@ $(function () {
 
     // change stream names on change function of stream name - feed
     $("#sourceConfigs").on('change', 'select[id^="streamName_"]', function () {
-        var dataType = $(this).closest('div.sourceConfigForm').data('type');
+        var sourceType = $(this).closest('div.sourceConfigForm').data('type');
         var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
+        $('#attributesDiv_' + dynamicId).empty();
         Simulator.retrieveStreamAttributes(
             $('#executionPlanName_' + dynamicId).val(),
             $('#streamName_' + dynamicId).val(),
             function (data) {
-                // removeRulesOfAttributes(dynamicId); only for random
-                refreshAttributesListOfSource(dataType, dynamicId, data);
-                // addRulesForAttributes(dynamicId); only for random
+                removeAttributeConfigurationRules(sourceType, dynamicId);
+                refreshAttributesListOfSource(sourceType, dynamicId, data);
+                /*
+                 if the source iss db and if the database connection was already tested and then if the stream
+                 name is changed afterwards, load the column list to the new stream attributes
+                 */
+                if (sourceType === 'db') {
+                    if (verifyConnectionDetails(dynamicId) && $('#tableName_' + dynamicId).val() !== null) {
+                        refreshColumnNamesLists(dynamicId);
+                    }
+                } else if (sourceType ==='random') {
+                    $('.feed-attribute-random-' + dynamicId). each(function () {
+                        $(this).prop('selectedIndex', -1);
+                    })
+                }
+                addAttributeConfigurationRules(sourceType, dynamicId);
             },
             function (data) {
                 console.log(data);
@@ -383,6 +396,11 @@ $(function () {
         $('#submitFeedConfig').prop('disabled', false);
     });
 
+    // configure attribute configurations of random source
+    $("#sourceConfigs").on('change', 'select[data-type^="feed-attribute-random-"]', function () {
+       console.log('hi')
+    });
+
     // upload a new csv file
     $("#sourceConfigs").on('change', 'select[id^="fileName_"]', function () {
         if ($(this).val() === 'Upload CSV file') {
@@ -390,9 +408,18 @@ $(function () {
         }
     });
 
+    // enable the 'test connection; button only when all the fields required for database connection is provided
+    $("#sourceConfigs").on('keyup', '.required-for-db-connection', function () {
+        var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
+        if (verifyConnectionDetails(dynamicId)) {
+            $('#loadDbConnection_' + dynamicId).prop('disabled', false);
+        }
+    });
+
     // establish a database connection and retrieve the names of tables in the database
     $("#sourceConfigs").on('click', 'button[id^="loadDbConnection_"]', function () {
         var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
+        $('#connectionSuccessMsg_' + dynamicId).html(generateConnectionMessage(dynamicId, 'connecting'));
         var dataSourceLocation = $('#dataSourceLocation_' + dynamicId).val();
         if (dataSourceLocation === null || dataSourceLocation.length === 0) {
             console.error("Datasource location is required to test database connection")
@@ -419,13 +446,18 @@ $(function () {
             connectionDetails['dataSourceLocation'] = dataSourceLocation;
             connectionDetails['username'] = username;
             connectionDetails['password'] = password;
+            $(this).prop('disabled', true);
             Simulator.testDatabaseConnectivity(
                 JSON.stringify(connectionDetails),
                 function (data) {
                     refreshTableNamesFromDataSource(connectionDetails, dynamicId);
+                    $('#connectionSuccessMsg_' + dynamicId).html(generateConnectionMessage(dynamicId, 'success'));
+                    $('#loadDbConnection_' + dynamicId).prop('disabled', false);
                 },
                 function (msg) {
                     console.error(msg['responseText']);
+                    $('#connectionSuccessMsg_' + dynamicId).html(generateConnectionMessage(dynamicId, 'failure'));
+                    $('#loadDbConnection_' + dynamicId).prop('disabled', false);
                 }
             );
         }
@@ -434,48 +466,7 @@ $(function () {
     // upload a new csv file
     $("#sourceConfigs").on('change', 'select[id^="tableName_"]', function () {
         var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
-        var dataSourceLocation = $('#dataSourceLocation_' + dynamicId).val();
-        if (dataSourceLocation === null || dataSourceLocation.length === 0) {
-            console.error("Datasource location is required to test database connection")
-        }
-        var driverName = $('#driver_' + dynamicId).val();
-        if (driverName === null || driverName.length === 0) {
-            console.error("Driver is required to retrieve columns list")
-        }
-        var username = $('#username_' + dynamicId).val();
-        if (username === null || username.length === 0) {
-            console.error("Driver is required to retrieve columns list")
-        }
-        var password = $('#password_' + dynamicId).val();
-        if (password === null || password.length === 0) {
-            console.error("Password is required to retrieve columns list")
-        }
-        var tableName = $(this).val();
-        if (tableName === null || tableName.length === 0) {
-            console.error("Table name is required to retrieve columns list")
-        }
-
-        if (dataSourceLocation !== null && dataSourceLocation.length > 0
-            && driverName !== null && driverName.length > 0
-            && username !== null && username.length > 0
-            && password !== null && password.length > 0
-            && tableName !== null && tableName.length > 0) {
-            var connectionDetails = {};
-            connectionDetails['driver'] = driverName;
-            connectionDetails['dataSourceLocation'] = dataSourceLocation;
-            connectionDetails['username'] = username;
-            connectionDetails['password'] = password;
-            Simulator.retrieveColumnNames(
-                JSON.stringify(connectionDetails),
-                tableName,
-                function (data) {
-                    refreshColumnNamesList(data);
-                },
-                function (msg) {
-                    console.error(msg['responseText']);
-                }
-            );
-        }
+        refreshColumnNamesLists(dynamicId);
     });
 });
 
@@ -833,13 +824,13 @@ addRuleForAttribute = function (ctx) {
 removeRulesOfAttributes = function (elementId) {
     $('.single-event-attribute-' + elementId).each(
         function () {
-            removeRuleOfAttribute(this);
+            removeRulesOfAttribute(this);
         }
     );
 }
 
 // remove validation rule of an attribute
-removeRuleOfAttribute = function (ctx) {
+removeRulesOfAttribute = function (ctx) {
     $(ctx).rules('remove');
 };
 
@@ -942,6 +933,7 @@ disableDbSourceConfigInputFields = function (dynamicId) {
     $('#username_' + dynamicId).val('').prop('disabled', true);
     $('#password_' + dynamicId).val('').prop('disabled', true);
     $('#loadDbConnection_' + dynamicId).val('').prop('disabled', true);
+    $('#connectionSuccessMsg_' + dynamicId).empty();
     $('#tableName_' + dynamicId).val('').prop('disabled', true);
 
     $('#timestampAttribute_' + dynamicId).val('').prop('disabled', true);
@@ -959,6 +951,7 @@ disableDbSourceConfigInputFields = function (dynamicId) {
 
 
 disableRandomSourceConfigInputFields = function (dynamicId) {
+    $('#timestamp_' + dynamicId).val('').prop('disabled', true);
 };
 
 reenableSourceConfigInputFields = function (sourceType, dynamicId) {
@@ -994,7 +987,6 @@ reenableDbSourceConfigInputFields = function (dynamicId) {
     $('#driver_' + dynamicId).prop('disabled', false);
     $('#username_' + dynamicId).prop('disabled', false);
     $('#password_' + dynamicId).prop('disabled', false);
-    $('#loadDbConnection_' + dynamicId).prop('disabled', false);
     $('#tableName_' + dynamicId).prop('disabled', false);
     $('#timestamp-option_' + dynamicId + '_timestampAttribute').prop('disabled', false);
     $('#timestampAttribute_' + dynamicId).prop('disabled', false);
@@ -1004,6 +996,7 @@ reenableDbSourceConfigInputFields = function (dynamicId) {
 
 
 reenableRandomSourceConfigInputFields = function (dynamicId) {
+    $('#timestamp_' + dynamicId).prop('disabled', false);
 };
 
 
@@ -1027,39 +1020,119 @@ createFormValidatorForFeedConfig = function () {
 
 
 // create jquery validators for feed config form
-appendSourceConfigValidation = function (sourceType, dynamicId) {
+addSourceConfigValidation = function (sourceType, dynamicId) {
+    $('#executionPlanName_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please select an execution plan name."
+        }
+    });
+    $('#streamName_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please select a stream name."
+        }
+    });
     switch (sourceType) {
         case 'CSV file':
-            $('#executionPlanName_' + dynamicId).rules('add', {
-                required: true,
-                messages: {
-                    required: "Please select an execution plan name."
-                }
-            });
-            $('#streamName_' + dynamicId).rules('add', {
-                required: true,
-                messages: {
-                    required: "Please select a stream name."
-                }
-            });
-            $('#fileName_' + dynamicId).rules('add', {
-                required: true,
-                messages: {
-                    required: "Please select a CSV file."
-                }
-            });
-            $('#delimiter_' + dynamicId).rules('add', {
-                required: true,
-                messages: {
-                    required: "Please specify a delimiter."
-                }
-            });
+            addCSVSourceConfigValidation(dynamicId);
             break;
         case 'Database':
+            addDBSourceConfigValidation(dynamicId);
             break;
         case 'Random':
+            // no specific validations required
             break;
     }
+};
+
+// create jquery validators for csv source config
+addCSVSourceConfigValidation = function (dynamicId) {
+    $('#fileName_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please select a CSV file."
+        }
+    });
+    $('#delimiter_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please specify a delimiter."
+        }
+    });
+};
+
+// create jquery validators for db source config
+addDBSourceConfigValidation = function (dynamicId) {
+    $('#dataSourceLocation_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please specify a datasource location."
+        }
+    });
+    $('#driver_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please specify a driver."
+        }
+    });
+    $('#username_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please specify a username."
+        }
+    });
+    $('#password_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please specify a password."
+        }
+    });
+    $('#tableName_' + dynamicId).rules('add', {
+        required: true,
+        messages: {
+            required: "Please select a table name."
+        }
+    });
+};
+
+addAttributeConfigurationRules = function (sourceType, dynamicId) {
+    switch (sourceType){
+        case 'csv':
+            addCSVSourceAttributeConfigValidation(dynamicId);
+            break;
+        case 'random' :
+            addRandomSourceAttributeConfigValidation(dynamicId);
+            break;
+        case 'db' :
+            //do nothing since no specific rules for columns list
+            break;
+    }
+};
+
+// create jquery validators for CSV indices
+addCSVSourceAttributeConfigValidation = function (dynamicId) {
+    $('.feed-attribute-csv-' + dynamicId).each(function () {
+        $(this).rules('add', {
+            required: true,
+            digits:true,
+            messages: {
+                required: "Please specify a column index.",
+                digits:"Index must be a positive integer."
+            }
+        });
+    })
+};
+// create jquery validators for random source attribute config
+addRandomSourceAttributeConfigValidation = function (dynamicId) {
+    $('.feed-attribute-random-' + dynamicId).each(function () {
+        $(this).rules('add', {
+            required: true,
+            messages: {
+                required: "Please specify a random attribute generation type."
+            }
+        });
+    })
 };
 
 
@@ -1067,17 +1140,62 @@ appendSourceConfigValidation = function (sourceType, dynamicId) {
 removeSourceConfigValidation = function (sourceType, dynamicId) {
     switch (sourceType) {
         case 'CSV file':
-            $('#executionPlanName_' + dynamicId).rules('remove');
-            $('#streamName_' + dynamicId).rules('remove');
-            $('#fileName_' + dynamicId).rules('remove');
-            $('#delimiter_' + dynamicId).rules('remove');
+            removeCSVSourceConfigValidation(dynamicId);
             break;
         case 'Database':
+            removeDBSourceConfigValidation(dynamicId);
             break;
         case 'Random':
+            removeRandomSourceAttributeConfigValidation(dynamicId);
             break;
     }
 };
+
+// remove jquery validators for deleted csv source config
+removeCSVSourceConfigValidation = function (dynamicId) {
+    $('#executionPlanName_' + dynamicId).rules('remove');
+    $('#streamName_' + dynamicId).rules('remove');
+    $('#fileName_' + dynamicId).rules('remove');
+    $('#delimiter_' + dynamicId).rules('remove');
+    removeCSVSourceAttributeConfigValidation(dynamicId);
+};
+
+// remove jquery validators for deleted db source config
+removeDBSourceConfigValidation = function (dynamicId) {
+    $('#dataSourceLocation_' + dynamicId).rules('remove');
+    $('#driver_' + dynamicId).rules('remove');
+    $('#username_' + dynamicId).rules('remove');
+    $('#password_' + dynamicId).rules('remove');
+    $('#tableName_' + dynamicId).rules('remove');
+};
+
+//remove attribute validation rules
+removeAttributeConfigurationRules = function (sourceType, dynamicId) {
+    switch (sourceType){
+        case 'csv':
+            removeCSVSourceConfigValidation(dynamicId);
+            break;
+        case 'random' :
+            removeRandomSourceAttributeConfigValidation(dynamicId);
+            break;
+        case 'db' :
+            //do nothing since no specific rules for columns list
+            break;
+    }
+};
+// remove jquery validators of csv source indices
+removeCSVSourceAttributeConfigValidation = function (dynamicId) {
+    $('.feed-attribute-csv-' + dynamicId).each(function () {
+        removeRulesOfAttribute(this);
+    })
+};
+// remove jquery validators of random source attribute config
+removeRandomSourceAttributeConfigValidation = function (dynamicId) {
+    $('.feed-attribute-random-' + dynamicId).each(function () {
+        removeRulesOfAttribute(this);
+    })
+};
+
 // refresh the remaining source config panel headings once a source is deleted
 refreshConfigPanelHeadings = function () {
     $('h4.source-title').each(function (i) {
@@ -1091,9 +1209,6 @@ refreshAttributesListOfSource = function (dataType, dynamicId, streamAttributes)
     $('#attributesDiv_' + dynamicId).html(generateAttributesDivForSource(dataType, dynamicId));
     var attributes = generateAttributesListForSource(dataType, dynamicId, streamAttributes);
     $('#attributes_' + dynamicId).html(attributes);
-    if (dataType === 'db') {
-        refre
-    }
 };
 
 //generate attribute div for inputs
@@ -1155,7 +1270,7 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
         '</div>';
     var randomAttribute =
         '<div>' +
-        '   <label for ="attributes_{{dynamicId}}_{{attributeName}}">' +
+        '   <label for ="attributes_{{dynamicId}}_{{attributeName}}" class="labelSize300Px">' +
         '       {{attributeName}}({{attributeType}})' +
         '       <select id="attributes_{{dynamicId}}_{{attributeName}}"' +
         '       name="attributes_{{dynamicId}}_{{attributeName}}" ' +
@@ -1192,6 +1307,32 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
 };
 
 
+//generate success message fro database connection
+generateConnectionMessage = function (dynamicId, status) {
+    var connectingMsg =
+        '<div id="connectionSuccessMsg_{{dynamicId}}" class="db-connection-connecting">' +
+        '<label>Attempting to connect to datasource...</label>' +
+        '</div>';
+
+    var successMsg =
+        '<div id="connectionSuccessMsg_{{dynamicId}}" class="db-connection-success">' +
+        '<label>Successfully connected</label>' +
+        '</div>';
+
+    var failureMsg =
+        '<div id="connectionSuccessMsg_{{dynamicId}}" class="db-connection-failure">' +
+        '<label>Connection failed</label>' +
+        '</div>';
+    switch (status) {
+        case 'connecting':
+            return connectingMsg.replaceAll('{{dynamicId}}', dynamicId);
+        case 'success':
+            return successMsg.replaceAll('{{dynamicId}}', dynamicId);
+        case 'failure':
+            return failureMsg.replaceAll('{{dynamicId}}', dynamicId);
+    }
+};
+
 //generate input fields for attributes
 refreshTableNamesFromDataSource = function (connectionDetails, dynamicId) {
     Simulator.retrieveTableNames(
@@ -1206,12 +1347,72 @@ refreshTableNamesFromDataSource = function (connectionDetails, dynamicId) {
     )
 };
 
+// check whether the connection details and table name is available
+verifyConnectionDetails = function (dynamicId) {
+    if ($('#dataSourceLocation_' + dynamicId).val() !== ''
+        && $('#driver_' + dynamicId).val() !== ''
+        && $('#username_' + dynamicId).val() !== ''
+        && $('#password_' + dynamicId).val() !== '') {
+        return true;
+    }
+};
+
+// retrieve column names of the selected table
+refreshColumnNamesLists = function (dynamicId) {
+    var dataSourceLocation = $('#dataSourceLocation_' + dynamicId).val();
+    if (dataSourceLocation === null || dataSourceLocation.length === 0) {
+        console.error("Datasource location is required to retrieve columns list.")
+    }
+    var driverName = $('#driver_' + dynamicId).val();
+    if (driverName === null || driverName.length === 0) {
+        console.error("Driver is required to retrieve columns list.")
+    }
+    var username = $('#username_' + dynamicId).val();
+    if (username === null || username.length === 0) {
+        console.error("Driver is required to retrieve columns list.")
+    }
+    var password = $('#password_' + dynamicId).val();
+    if (password === null || password.length === 0) {
+        console.error("Password is required to retrieve columns list.")
+    }
+    var tableName = $('#tableName_' + dynamicId).val();
+    if (tableName === null || tableName.length === 0) {
+        console.error("Table name is required to retrieve columns list.")
+    }
+
+    if (dataSourceLocation !== null && dataSourceLocation.length > 0
+        && driverName !== null && driverName.length > 0
+        && username !== null && username.length > 0
+        && password !== null && password.length > 0
+        && tableName !== null && tableName.length > 0) {
+        var connectionDetails = {};
+        connectionDetails['driver'] = driverName;
+        connectionDetails['dataSourceLocation'] = dataSourceLocation;
+        connectionDetails['username'] = username;
+        connectionDetails['password'] = password;
+        Simulator.retrieveColumnNames(
+            JSON.stringify(connectionDetails),
+            tableName,
+            function (data) {
+                loadColumnNamesList(data, dynamicId);
+            },
+            function (msg) {
+                console.error(msg['responseText']);
+            }
+        );
+    }
+};
+
+
 //generate input fields for attributes
-refreshColumnNamesList = function (columnNames, dynamicId) {
+loadColumnNamesList = function (columnNames, dynamicId) {
     var columnsList = generateOptions(columnNames);
     $('.feed-attribute-db-' + dynamicId).each(function () {
-        console.log(this)
-    })
+        $(this).html(columnsList);
+        $(this).prop("selectedIndex", -1);
+    });
+    $('#timestampAttribute_' + dynamicId).html(columnsList);
+    $('#timestampAttribute_' + dynamicId).prop("selectedIndex", -1);
 };
 
 

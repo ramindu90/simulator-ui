@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label class="custom-radio labelSize200Px">
                     <input type="radio" name="timestamp-option_{{dynamicId}}"
-                           id="timestamp-option_{{dynamicId}}_timestampAttribute" required="true">
+                           id="timestamp-option_{{dynamicId}}_timestampAttribute">
                     <span class="helper">Timestamp Attribute</span>
                     <input type="text" class="form-control" name="timestampAttribute_{{dynamicId}}"
                            id="timestampAttribute_{{dynamicId}}">
@@ -36,7 +36,7 @@
             <div class="form-group">
                 <label class="custom-radio labelSize200Px">
                     <input type="radio" name="timestamp-option_{{dynamicId}}"
-                           id="timestamp-option_{{dynamicId}}_timestampInterval" required="true">
+                           id="timestamp-option_{{dynamicId}}_timestampInterval" checked>
                     <span class="helper">Timestamp Interval</span>
                     <input class="form-control" name="timestampInterval_{{dynamicId}}" value="1000"
                            id="timestampInterval_{{dynamicId}}">
@@ -50,19 +50,18 @@
         <div class="form-group">
             <label class="custom-radio">
                 <input type="radio" id="isOrdered_true_{{dynamicId}}" name="isOrdered_{{dynamicId}}" value="true"
-                       required="true">
+                       checked>
                 <span class="helper">Yes</span>
             </label>
             <label class="custom-radio">
-                <input type="radio" id="isOrdered_false_{{dynamicId}}" name="isOrdered_{{dynamicId}}" value="false"
-                       required="true">
+                <input type="radio" id="isOrdered_false_{{dynamicId}}" name="isOrdered_{{dynamicId}}" value="false">
                 <span class="helper">No</span>
             </label>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="labelSize100Px">Delimiter<span class="requiredAstrix"> *</span>
+        <label class="labelSize200Px">Delimiter<span class="requiredAstrix"> *</span>
         <input type="text" class="form-control" id="delimiter_{{dynamicId}}" name="delimiter_{{dynamicId}}">
         </label>
     </div>
