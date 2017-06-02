@@ -117,14 +117,14 @@ a:hover, a:focus {
     width: 600px !important;
 }
 
-.db-connection-success{
+.color-green{
     color: #0fcd10;
 }
 
-.db-connection-failure{
+.color-red{
     color: #d2111a;
 }
 
-.db-connection-connecting{
+.color-grey{
     color: #939393;
 }

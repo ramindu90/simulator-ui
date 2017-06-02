@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bcc77a4c-6815-484e-962c-bd68e03f7e88" name="Default" comment="adding csv source form">
+    <list default="true" id="bcc77a4c-6815-484e-962c-bd68e03f7e88" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/custom.css" afterPath="$PROJECT_DIR$/css/custom.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/jquery-ui-timepicker-addon.css" afterPath="$PROJECT_DIR$/css/jquery-ui-timepicker-addon.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/feedSimulationForm.html" afterPath="$PROJECT_DIR$/feedSimulationForm.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/jquery-ui-timepicker-addon.js" afterPath="$PROJECT_DIR$/js/jquery-ui-timepicker-addon.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/main.js" afterPath="$PROJECT_DIR$/js/main.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/simulatorTemplates/csv.html" afterPath="$PROJECT_DIR$/simulatorTemplates/csv.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/simulatorTemplates/db.html" afterPath="$PROJECT_DIR$/simulatorTemplates/db.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/simulatorTemplates/random.html" afterPath="$PROJECT_DIR$/simulatorTemplates/random.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../js/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../js/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../js/js-client/js/previousMthods.js" afterPath="$PROJECT_DIR$/../js/js-client/js/previousMthods.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,8 +27,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2358">
-              <caret line="131" column="32" lean-forward="false" selection-start-line="131" selection-start-column="32" selection-end-line="131" selection-end-column="32" />
+            <state relative-caret-position="2196">
+              <caret line="122" column="26" lean-forward="false" selection-start-line="122" selection-start-column="26" selection-end-line="122" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -35,8 +37,8 @@
       <file leaf-file-name="csv.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulatorTemplates/csv.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="542">
-              <caret line="38" column="88" lean-forward="false" selection-start-line="38" selection-start-column="88" selection-end-line="38" selection-end-column="88" />
+            <state relative-caret-position="666">
+              <caret line="37" column="32" lean-forward="false" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -45,7 +47,7 @@
       <file leaf-file-name="simulatorRestClient.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/simulatorRestClient.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
+            <state relative-caret-position="810">
               <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
               <folding />
             </state>
@@ -55,8 +57,8 @@
       <file leaf-file-name="custom.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/custom.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="690">
-              <caret line="100" column="3" lean-forward="false" selection-start-line="100" selection-start-column="3" selection-end-line="100" selection-end-column="3" />
+            <state relative-caret-position="2142">
+              <caret line="119" column="12" lean-forward="false" selection-start-line="119" selection-start-column="1" selection-end-line="119" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -66,7 +68,7 @@
         <entry file="file://$PROJECT_DIR$/simulatorTemplates/random.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="432">
-              <caret line="24" column="66" lean-forward="false" selection-start-line="24" selection-start-column="56" selection-end-line="24" selection-end-column="66" />
+              <caret line="24" column="113" lean-forward="false" selection-start-line="24" selection-start-column="113" selection-end-line="24" selection-end-column="113" />
               <folding />
             </state>
           </provider>
@@ -75,8 +77,8 @@
       <file leaf-file-name="db.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulatorTemplates/db.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="77" column="84" lean-forward="false" selection-start-line="77" selection-start-column="77" selection-end-line="77" selection-end-column="84" />
+            <state relative-caret-position="812">
+              <caret line="89" column="10" lean-forward="false" selection-start-line="89" selection-start-column="10" selection-end-line="89" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -85,8 +87,8 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="381" column="28" lean-forward="true" selection-start-line="381" selection-start-column="28" selection-end-line="381" selection-end-column="28" />
+            <state relative-caret-position="142">
+              <caret line="502" column="26" lean-forward="false" selection-start-line="502" selection-start-column="26" selection-end-line="502" selection-end-column="26" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -97,7 +99,7 @@
       <file leaf-file-name="jquery.validate.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/libs/jquery-validation_1.14.0/jquery.validate.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-198">
+            <state relative-caret-position="1764">
               <caret line="105" column="24" lean-forward="false" selection-start-line="105" selection-start-column="15" selection-end-line="105" selection-end-column="24" />
               <folding />
             </state>
@@ -107,8 +109,8 @@
       <file leaf-file-name="feedSimulationForm.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/feedSimulationForm.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-268">
-              <caret line="87" column="14" lean-forward="true" selection-start-line="80" selection-start-column="64" selection-end-line="80" selection-end-column="76" />
+            <state relative-caret-position="2376">
+              <caret line="132" column="25" lean-forward="false" selection-start-line="132" selection-start-column="25" selection-end-line="132" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -156,6 +158,12 @@
       <find>sele</find>
       <find>insert</find>
       <find>each</find>
+      <find>create</find>
+      <find>runDebug</find>
+      <find>addRandomSourceConfigValidation</find>
+      <find>$(this).prop('selectedIndex',-1);</find>
+      <find>$(this).prop(&quot;selectedIndex&quot;,-1)</find>
+      <find>selectedIndex</find>
     </findStrings>
     <dirStrings>
       <dir>$PROJECT_DIR$/css</dir>
@@ -178,12 +186,12 @@
         <option value="$PROJECT_DIR$/js/simulatorRestClientOld.js" />
         <option value="$PROJECT_DIR$/js/sss.js" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/feedSimulationForm.html" />
         <option value="$PROJECT_DIR$/js/simulatorRestClient.js" />
-        <option value="$PROJECT_DIR$/css/custom.css" />
-        <option value="$PROJECT_DIR$/simulatorTemplates/random.html" />
+        <option value="$PROJECT_DIR$/feedSimulationForm.html" />
         <option value="$PROJECT_DIR$/simulatorTemplates/db.html" />
         <option value="$PROJECT_DIR$/simulatorTemplates/csv.html" />
+        <option value="$PROJECT_DIR$/simulatorTemplates/random.html" />
+        <option value="$PROJECT_DIR$/css/custom.css" />
         <option value="$PROJECT_DIR$/js/main.js" />
       </list>
     </option>
@@ -195,10 +203,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="24" />
-    <option name="width" value="1696" />
-    <option name="height" value="1056" />
+    <option name="x" value="186" />
+    <option name="y" value="71" />
+    <option name="width" value="1690" />
+    <option name="height" value="1020" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -216,6 +224,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -274,7 +283,6 @@
       </pane>
       <pane id="Scratches" />
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -725,7 +733,11 @@
       <workItem from="1496205075363" duration="9297000" />
       <workItem from="1496237590904" duration="1928000" />
       <workItem from="1496240384537" duration="9489000" />
-      <workItem from="1496288321991" duration="19034000" />
+      <workItem from="1496288321991" duration="20866000" />
+      <workItem from="1496374594263" duration="3564000" />
+      <workItem from="1496380855970" duration="8650000" />
+      <workItem from="1496394578307" duration="7585000" />
+      <workItem from="1496409679172" duration="11666000" />
     </task>
     <task id="LOCAL-00001" summary="adding datetime picker and isNull checkbox">
       <created>1495616957275</created>
@@ -748,14 +760,28 @@
       <option name="project" value="LOCAL" />
       <updated>1496240278412</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="1. dynamically loading column names for attribute configuration of database&#10;2. random source form">
+      <created>1496312690371</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1496312690371</updated>
+    </task>
+    <task id="LOCAL-00005" summary="adding a drop down for boolean attributes in single event form">
+      <created>1496379778671</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1496379778671</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="124457000" />
+    <option name="totallyTimeSpent" value="157754000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1696" height="1056" extended-state="4" />
+    <frame x="186" y="71" width="1690" height="1020" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -773,9 +799,9 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13515152" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1392944" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26650217" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26974484" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -833,24 +859,30 @@
     <MESSAGE value="adding time picker addon css and js" />
     <MESSAGE value="adding feed form" />
     <MESSAGE value="adding data source form" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding data source form" />
+    <MESSAGE value="1. dynamically loading column names for attribute configuration of database&#10;2. random source form" />
+    <MESSAGE value="adding a drop down for boolean attributes in single event form" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding a drop down for boolean attributes in single event form" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/js/main.js</url>
-          <line>546</line>
+          <line>534</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/js/main.js</url>
-          <line>1218</line>
-          <properties />
+          <line>1269</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/js/main.js</url>
+          <line>543</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="6" />
+      <option name="time" value="7" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1096,14 +1128,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2358">
-          <caret line="131" column="32" lean-forward="false" selection-start-line="131" selection-start-column="32" selection-end-line="131" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
@@ -1114,7 +1138,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/js/simulatorRestClient.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
+        <state relative-caret-position="810">
           <caret line="45" column="0" lean-forward="false" selection-start-line="45" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
           <folding />
         </state>
@@ -1122,32 +1146,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/libs/jquery-validation_1.14.0/jquery.validate.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-198">
+        <state relative-caret-position="1764">
           <caret line="105" column="24" lean-forward="false" selection-start-line="105" selection-start-column="15" selection-end-line="105" selection-end-column="24" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulatorTemplates/db.html">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="77" column="84" lean-forward="false" selection-start-line="77" selection-start-column="77" selection-end-line="77" selection-end-column="84" />
+        <state relative-caret-position="2196">
+          <caret line="122" column="26" lean-forward="false" selection-start-line="122" selection-start-column="26" selection-end-line="122" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/feedSimulationForm.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2376">
+          <caret line="132" column="25" lean-forward="false" selection-start-line="132" selection-start-column="25" selection-end-line="132" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/simulatorTemplates/csv.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="542">
-          <caret line="38" column="88" lean-forward="false" selection-start-line="38" selection-start-column="88" selection-end-line="38" selection-end-column="88" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/custom.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="100" column="3" lean-forward="false" selection-start-line="100" selection-start-column="3" selection-end-line="100" selection-end-column="3" />
+        <state relative-caret-position="666">
+          <caret line="37" column="32" lean-forward="false" selection-start-line="37" selection-start-column="32" selection-end-line="37" selection-end-column="32" />
           <folding />
         </state>
       </provider>
@@ -1155,23 +1179,31 @@
     <entry file="file://$PROJECT_DIR$/simulatorTemplates/random.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="432">
-          <caret line="24" column="66" lean-forward="false" selection-start-line="24" selection-start-column="56" selection-end-line="24" selection-end-column="66" />
+          <caret line="24" column="113" lean-forward="false" selection-start-line="24" selection-start-column="113" selection-end-line="24" selection-end-column="113" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/feedSimulationForm.html">
+    <entry file="file://$PROJECT_DIR$/css/custom.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-268">
-          <caret line="87" column="14" lean-forward="true" selection-start-line="80" selection-start-column="64" selection-end-line="80" selection-end-column="76" />
+        <state relative-caret-position="2142">
+          <caret line="119" column="12" lean-forward="false" selection-start-line="119" selection-start-column="1" selection-end-line="119" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulatorTemplates/db.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="812">
+          <caret line="89" column="10" lean-forward="false" selection-start-line="89" selection-start-column="10" selection-end-line="89" selection-end-column="10" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="381" column="28" lean-forward="true" selection-start-line="381" selection-start-column="28" selection-end-line="381" selection-end-column="28" />
+        <state relative-caret-position="142">
+          <caret line="502" column="26" lean-forward="false" selection-start-line="502" selection-start-column="26" selection-end-line="502" selection-end-column="26" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>

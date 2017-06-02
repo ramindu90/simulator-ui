@@ -339,3 +339,50 @@ function createAttributesList(attributes) {
         $('#attributes').append(div);
     }
 }
+
+
+
+
+
+
+
+// start inactive execution plans in run or debug mode
+$("#sourceConfigs").on('click', 'button[id^="feed_start_"]', function () {
+    var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
+    var executionPlanName = $('#executionPlanName_' + dynamicId).val();
+    var mode = $('input[name=feed_runDebug_' + dynamicId + ']:checked').val();
+    if (mode === 'run') {
+        $.ajax({
+            async: true,
+            url: "http://localhost:9090/editor/" + executionPlanName + "/start",
+            type: "GET",
+            success: function (data) {
+                console.log(data)
+            },
+            error: function (msg) {
+                console.error(msg)
+            }
+        });
+        executionPlanDetailsMap[executionPlanName] = 'RUN';
+    } else if (mode === 'debug') {
+        $.ajax({
+            async: true,
+            url: "http://localhost:9090/editor/" + executionPlanName + "/debug",
+            type: "GET",
+            success: function (data) {
+                if (typeof callback === 'function')
+                    console.log(data)
+            },
+            error: function (msg) {
+                if (typeof error === 'function')
+                    console.error(msg)
+            }
+        });
+        executionPlanDetailsMap[executionPlanName] = 'DEBUG';
+    }
+    disableRunDebugButtonSection('feed', dynamicId);
+    $('#executionPlanName_' + dynamicId + '_mode').html('mode : ' + executionPlanDetailsMap[executionPlanName]);
+    $('#single_executionPlanStartMsg_' + dynamicId).html('Execution plan \'' +
+        executionPlanName + '\' started in \'' + mode + '\' mode.');
+    $('#submitFeedConfig').prop('disabled', false);
+});

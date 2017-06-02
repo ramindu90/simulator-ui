@@ -17,6 +17,33 @@ singleEventConfigCount = 2;
 executionPlanDetailsMap = {};
 totalSourceNum = 1;
 var feedConfigFormValidator;
+var propertyBasedGenerationOptions = ['TIME_12H', 'TIME_24H',
+    'SECOND', 'MINUTE', 'MONTH',
+    'MONTH_NUM', 'YEAR', 'DAY',
+    'DAY_OF_WEEK', 'DATE', 'FULL_NAME',
+    'FIRST_NAME', 'LAST_NAME', 'WORDS',
+    'BSN', 'ADDRESS', 'EMAIL',
+    'PHONE_NUM', 'POST_CODE', 'STATE',
+    'CITY', 'COMPANY', 'COUNTRY',
+    'STREET_NAME', 'HOUSE_NO', 'HEIGHT_CM',
+    'HEIGHT_M', 'WEIGHT', 'OCCUPATION',
+    'IBAN', 'BIC', 'VISA_CARD', 'PIN_CODE',
+    'URL',
+    'IP',
+    'IP_V6',
+    'MAC_ADDRESS',
+    'UUID',
+    'USERNAME',
+    'COLOUR',
+    'ALTITUDE',
+    'DEPTH',
+    'COORDINATES',
+    'LATITUDE',
+    'LONGITUDE',
+    'GEO_HASH',
+    'SENTENCE',
+    'PARAGRAPH'
+];
 
 $(function () {
     // add methods to validate int/long and double/float
@@ -71,7 +98,7 @@ $(function () {
                     console.log(data);
                 });
             if (executionPlanDetailsMap[executionPlanName] === 'STOP') {
-                $('#single_runDebugButtons_' + dynamicId).html(createRunDebugButtons('single', dynamicId));
+                $('#single_runDebugButtons_' + dynamicId).html(generateRunDebugButtons('single', dynamicId));
                 $('#single_executionPlanStartMsg_' + dynamicId).html('Start execution plan \'' +
                     executionPlanName + '\' in either \'run\' or \'debug\' mode.')
                 $('#single_sendEvent_' + dynamicId).prop('disabled', true);
@@ -223,7 +250,7 @@ $(function () {
      * */
 
     $('#createFeedConfig').on('click', function () {
-        feedConfigFormValidator = createFormValidatorForFeedConfig();
+        feedConfigFormValidator = generateFormValidatorForFeedConfig();
 
     });
 
@@ -242,9 +269,9 @@ $(function () {
         $('.collapse').collapse();
         var sourceType = $('#sources').val();
         var numItems = $('div.feed-config').length + 1;
-        var sourcePanel = createConfigPanel(totalSourceNum, numItems, sourceType);
+        var sourcePanel = generateConfigPanel(totalSourceNum, numItems, sourceType);
         $('#sourceConfigs').append(sourcePanel);
-        var sourceForm = createSourceForm(sourceType, totalSourceNum);
+        var sourceForm = generateSourceForm(sourceType, totalSourceNum);
         $('#panelBody_source_' + totalSourceNum).html(sourceForm);
         loadExecutionPlanNames('executionPlanName_' + totalSourceNum);
         if (sourceType === 'CSV file') {
@@ -273,8 +300,8 @@ $(function () {
         var executionPlanName = $(this).val();
         var sourceType = $(this).closest('div.sourceConfigForm').data('type');
         $('#' + elementId + '_mode').html('mode : ' + executionPlanDetailsMap[executionPlanName]);
+        removeAttributeConfigurationRules(sourceType, dynamicId);
         $('#attributesDiv_' + dynamicId).empty();
-        $('#runDebugButtons_' + dynamicId).empty();
         if (executionPlanDetailsMap[executionPlanName] === 'FAULTY') {
             disableSourceConfigInputFields(sourceType, dynamicId);
             $('#submitFeedConfig').prop('disabled', true);
@@ -290,12 +317,6 @@ $(function () {
                 function (data) {
                     console.log(data);
                 });
-            if (executionPlanDetailsMap[executionPlanName] === 'STOP') {
-                $('#runDebugButtons_' + dynamicId).html(createRunDebugButtons('feed', dynamicId));
-                $('#feed_executionPlanStartMsg_' + dynamicId).html('Start execution plan \'' +
-                    executionPlanName + '\' in either \'run\' or \'debug\' mode.');
-                $('#submitFeedConfig').prop('disabled', true);
-            }
         }
     });
 
@@ -303,12 +324,11 @@ $(function () {
     $("#sourceConfigs").on('change', 'select[id^="streamName_"]', function () {
         var sourceType = $(this).closest('div.sourceConfigForm').data('type');
         var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
-        $('#attributesDiv_' + dynamicId).empty();
+        removeAttributeConfigurationRules(sourceType, dynamicId);
         Simulator.retrieveStreamAttributes(
             $('#executionPlanName_' + dynamicId).val(),
             $('#streamName_' + dynamicId).val(),
             function (data) {
-                removeAttributeConfigurationRules(sourceType, dynamicId);
                 refreshAttributesListOfSource(sourceType, dynamicId, data);
                 /*
                  if the source iss db and if the database connection was already tested and then if the stream
@@ -318,15 +338,15 @@ $(function () {
                     if (verifyConnectionDetails(dynamicId) && $('#tableName_' + dynamicId).val() !== null) {
                         refreshColumnNamesLists(dynamicId);
                     }
-                } else if (sourceType ==='random') {
-                    $('.feed-attribute-random-' + dynamicId). each(function () {
+                } else if (sourceType === 'random') {
+                    $('.feed-attribute-random-' + dynamicId).each(function () {
                         $(this).prop('selectedIndex', -1);
                     })
                 }
                 addAttributeConfigurationRules(sourceType, dynamicId);
             },
             function (data) {
-                console.log(data);
+                console.error(data);
             });
     });
 
@@ -352,50 +372,6 @@ $(function () {
     $("#sourceConfigs").on('click', 'input[id^="timestampInterval_"]', function () {
         var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
         $('#timestamp-option_' + dynamicId + '_timestampInterval').prop('checked', true).trigger('click');
-    });
-
-    // start inactive execution plans in run or debug mode
-    $("#sourceConfigs").on('click', 'button[id^="feed_start_"]', function () {
-        var elementId = this.id;
-        var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
-        var executionPlanName = $('#executionPlanName_' + dynamicId).val();
-        if ($('input[name=feed_runDebug_' + dynamicId + ']:checked').val() === 'run') {
-            $.ajax({
-                async: true,
-                url: "http://localhost:9090/editor/" + executionPlanName + "/start",
-                type: "GET",
-                success: function (data) {
-                    console.log(data)
-                },
-                error: function (msg) {
-                    console.error(msg)
-                }
-            });
-            executionPlanDetailsMap[executionPlanName] = 'RUN';
-        } else if ($('input[name=feed_runDebug_' + dynamicId + ']:checked').val() === 'debug') {
-            $.ajax({
-                async: true,
-                url: "http://localhost:9090/editor/" + executionPlanName + "/debug",
-                type: "GET",
-                success: function (data) {
-                    if (typeof callback === 'function')
-                        console.log(data)
-                },
-                error: function (msg) {
-                    if (typeof error === 'function')
-                        console.error(msg)
-                }
-            });
-            executionPlanDetailsMap[executionPlanName] = 'DEBUG';
-        }
-        disableRunDebugButtonSection('feed', dynamicId);
-        $('#executionPlanName_' + dynamicId + '_mode').html('mode : ' + executionPlanDetailsMap[executionPlanName]);
-        $('#submitFeedConfig').prop('disabled', false);
-    });
-
-    // configure attribute configurations of random source
-    $("#sourceConfigs").on('change', 'select[data-type^="feed-attribute-random-"]', function () {
-       console.log('hi')
     });
 
     // upload a new csv file
@@ -464,6 +440,21 @@ $(function () {
     $("#sourceConfigs").on('change', 'select[id^="tableName_"]', function () {
         var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
         refreshColumnNamesLists(dynamicId);
+    });
+
+
+    // configure attribute configurations of random source
+    $("#sourceConfigs").on('change', 'select[class^="feed-attribute-random-"]', function () {
+        var randomType = $(this).val();
+        var dynamicId = $(this).closest('div.sourceConfigForm').data('id');
+        var attributeType = $(this).data('type');
+        var id = this.id;
+        $('#' + id + '_config').html(generateRandomAttributeConfiguration(randomType, attributeType, dynamicId, id));
+        // set the selected option of property based attribute configuration type (if any) to -1
+        $('[class^="feed-attribute-random-' + dynamicId + '-property"]').each(function () {
+            $(this).prop('selectedIndex',-1);
+        });
+        addRandomConfigTypeValidation(id);
     });
 });
 
@@ -567,8 +558,8 @@ addSingleEventFormValidator = function (formId) {
     });
 };
 
-// if the execution plan is not on run r debug mode, append buttons to start execution plan in either of the modes
-createRunDebugButtons = function (simulationType, dynamicId) {
+// if the execution plan is not on run or debug mode, append buttons to start execution plan in either of the modes
+generateRunDebugButtons = function (simulationType, dynamicId) {
     var runDebugButtons =
         '<div class="col-xs-6 col-md-6 btn-group " data-toggle="buttons">' +
         '   <label class="btn btn-primary active"> ' +
@@ -793,7 +784,7 @@ addRuleForAttribute = function (ctx) {
                 validateIntOrLong: true,
                 messages: {
                     required: "Please specify an attribute value.",
-                    validateIntOrLong: "Please specify a valid numeric value."
+                    validateIntOrLong: "Please specify a valid " + type.toLowerCase() + " value."
                 }
             });
             break;
@@ -804,7 +795,7 @@ addRuleForAttribute = function (ctx) {
                 validateFloatOrDouble: true,
                 messages: {
                     required: "Please specify an attribute value.",
-                    validateFloatOrDouble: "Please specify a valid numeric value."
+                    validateFloatOrDouble: "Please specify a valid " + type.toLowerCase() + " value."
                 }
             });
             break;
@@ -830,7 +821,7 @@ removeRulesOfAttribute = function (ctx) {
  feed simulation functions
  */
 
-createConfigPanel = function (totalSourceNum, currentSourceNum, sourceType) {
+generateConfigPanel = function (totalSourceNum, currentSourceNum, sourceType) {
     var panel =
         '<div class="panel panel-default" id = "sourceConfig_{{dynamicId}}" data-type="{{sourceType}}"' +
         ' data-id="{{dynamicId}}"> ' +
@@ -854,7 +845,7 @@ createConfigPanel = function (totalSourceNum, currentSourceNum, sourceType) {
 
 }
 
-createSourceForm = function (sourceType, totalSourceNum) {
+generateSourceForm = function (sourceType, totalSourceNum) {
     switch (sourceType) {
         case 'CSV file':
             return csvTemplate.replaceAll('{{dynamicId}}', totalSourceNum);
@@ -992,7 +983,7 @@ reenableRandomSourceConfigInputFields = function (dynamicId) {
 
 
 // create jquery validators for feed config form
-createFormValidatorForFeedConfig = function () {
+generateFormValidatorForFeedConfig = function () {
     return $('#feedSimulationConfig').validate({
         rules: {
             simulationName: "required",
@@ -1024,6 +1015,12 @@ addSourceConfigValidation = function (sourceType, dynamicId) {
             required: "Please select a stream name."
         }
     });
+    $('#timestampInterval_' + dynamicId).rules('add', {
+        digits: true,
+        messages: {
+            digits: "Timestamp interval must be a positive integer."
+        }
+    });
     switch (sourceType) {
         case 'CSV file':
             addCSVSourceConfigValidation(dynamicId);
@@ -1043,6 +1040,12 @@ addCSVSourceConfigValidation = function (dynamicId) {
         required: true,
         messages: {
             required: "Please select a CSV file."
+        }
+    });
+    $('#timestampAttribute_' + dynamicId).rules('add', {
+        digits: true,
+        messages: {
+            digits: "Timestamp attribute must be a positive integer."
         }
     });
     $('#delimiter_' + dynamicId).rules('add', {
@@ -1087,13 +1090,15 @@ addDBSourceConfigValidation = function (dynamicId) {
     });
 };
 
+
+// add jquery validations for attribute configurations
 addAttributeConfigurationRules = function (sourceType, dynamicId) {
-    switch (sourceType){
+    switch (sourceType) {
         case 'csv':
-            addCSVSourceAttributeConfigValidation(dynamicId);
+            addCSVSourceAttributeValidation(dynamicId);
             break;
         case 'random' :
-            addRandomSourceAttributeConfigValidation(dynamicId);
+            addRandomSourceAttributeValidation(dynamicId);
             break;
         case 'db' :
             //do nothing since no specific rules for columns list
@@ -1102,20 +1107,21 @@ addAttributeConfigurationRules = function (sourceType, dynamicId) {
 };
 
 // create jquery validators for CSV indices
-addCSVSourceAttributeConfigValidation = function (dynamicId) {
+addCSVSourceAttributeValidation = function (dynamicId) {
     $('.feed-attribute-csv-' + dynamicId).each(function () {
         $(this).rules('add', {
             required: true,
-            digits:true,
+            digits: true,
             messages: {
                 required: "Please specify a column index.",
-                digits:"Index must be a positive integer."
+                digits: "Index must be a positive integer."
             }
         });
     })
 };
+
 // create jquery validators for random source attribute config
-addRandomSourceAttributeConfigValidation = function (dynamicId) {
+addRandomSourceAttributeValidation = function (dynamicId) {
     $('.feed-attribute-random-' + dynamicId).each(function () {
         $(this).rules('add', {
             required: true,
@@ -1123,6 +1129,48 @@ addRandomSourceAttributeConfigValidation = function (dynamicId) {
                 required: "Please specify a random attribute generation type."
             }
         });
+    })
+};
+
+// create jquery validators for custom, primitive, property and regex based random generation configurations
+addRandomConfigTypeValidation = function (parentId) {
+    $('input[id^="' + parentId + '_"], select[id^="' + parentId + '_"]').each(function () {
+        var id = this.id;
+        var inputType = $(this).data('type');
+        $(this).rules('add', {
+            required: true,
+            messages: {
+                required: "Please specify a value."
+            }
+        });
+        switch (inputType) {
+            case 'int':
+            case 'long':
+                $(this).rules('add', {
+                    validateIntOrLong: true,
+                    messages: {
+                        validateIntOrLong: "Please specify a valid " + inputType + " value."
+                    }
+                });
+                break;
+            case 'float':
+            case 'double' :
+                $(this).rules('add', {
+                    validateFloatOrDouble: true,
+                    messages: {
+                        validateFloatOrDouble: "Please specify a valid " + inputType + " value."
+                    }
+                });
+                break;
+            case 'numeric':
+                $(this).rules('add', {
+                    digits: true,
+                    messages: {
+                        digits: "Please specify a positive integer value."
+                    }
+                });
+                break;
+        }
     })
 };
 
@@ -1137,7 +1185,7 @@ removeSourceConfigValidation = function (sourceType, dynamicId) {
             removeDBSourceConfigValidation(dynamicId);
             break;
         case 'Random':
-            removeRandomSourceAttributeConfigValidation(dynamicId);
+            removeRandomConfigTypeValidation(dynamicId);
             break;
     }
 };
@@ -1147,6 +1195,8 @@ removeCSVSourceConfigValidation = function (dynamicId) {
     $('#executionPlanName_' + dynamicId).rules('remove');
     $('#streamName_' + dynamicId).rules('remove');
     $('#fileName_' + dynamicId).rules('remove');
+    $('#timestampAttribute_' + dynamicId).rules('remove');
+    $('#timestampInterval_' + dynamicId).rules('remove');
     $('#delimiter_' + dynamicId).rules('remove');
     removeCSVSourceAttributeConfigValidation(dynamicId);
 };
@@ -1160,14 +1210,20 @@ removeDBSourceConfigValidation = function (dynamicId) {
     $('#tableName_' + dynamicId).rules('remove');
 };
 
+// remove jquery validators for deleted random source config
+removeRandomSourceConfigValidation = function (dynamicId) {
+    $('#timestampInterval_' + dynamicId).rules('remove');
+    removeRandomConfigTypeValidation(dynamicId);
+};
+
 //remove attribute validation rules
 removeAttributeConfigurationRules = function (sourceType, dynamicId) {
-    switch (sourceType){
+    switch (sourceType) {
         case 'csv':
             removeCSVSourceConfigValidation(dynamicId);
             break;
         case 'random' :
-            removeRandomSourceAttributeConfigValidation(dynamicId);
+            removeRandomConfigTypeValidation(dynamicId);
             break;
         case 'db' :
             //do nothing since no specific rules for columns list
@@ -1181,9 +1237,13 @@ removeCSVSourceAttributeConfigValidation = function (dynamicId) {
     })
 };
 // remove jquery validators of random source attribute config
-removeRandomSourceAttributeConfigValidation = function (dynamicId) {
+removeRandomConfigTypeValidation = function (dynamicId) {
     $('.feed-attribute-random-' + dynamicId).each(function () {
+        var id = this.id;
         removeRulesOfAttribute(this);
+        $('input[id^="' + id + '_"], select[id^="' + id + '_"]').each(function () {
+            removeRulesOfAttribute(this);
+        });
     })
 };
 
@@ -1241,7 +1301,7 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
         '<div>' +
         '   <label for ="attributes_{{dynamicId}}_{{attributeName}}">' +
         '        {{attributeName}}({{attributeType}})' +
-        '       <input type="text" class="form-control feed-attribute-csv-{{dynamicId}}"' +
+        '       <input type="text" class="feed-attribute-csv-{{dynamicId}} form-control"' +
         '       name="attributes_{{dynamicId}}_{{attributeName}}" ' +
         '       id="attributes_{{dynamicId}}_{{attributeName}}" data-id="{{dynamicId}}"' +
         '       data-type ="{{attributeType}}">' +
@@ -1249,11 +1309,11 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
         '</div>';
     var dbAttribute =
         '<div>' +
-        '   <label for ="attributes_{{dynamicId}}_{{attributeName}}" class="col-sm-4 col-md-4">' +
+        '   <label for ="attributes_{{dynamicId}}_{{attributeName}}" class="labelSize300Px">' +
         '       {{attributeName}}({{attributeType}})' +
         '       <select id="attributes_{{dynamicId}}_{{attributeName}}"' +
         '       name="attributes_{{dynamicId}}_{{attributeName}}" ' +
-        '       class="form-control feed-attribute-db-{{dynamicId}}" ' +
+        '       class="feed-attribute-db-{{dynamicId}} form-control" ' +
         '       data-id="{{dynamicId}}" ' +
         '       data-type="{{attributeType}}"> ' +
         '       </select>' +
@@ -1263,16 +1323,21 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
         '<div>' +
         '   <label for ="attributes_{{dynamicId}}_{{attributeName}}" class="labelSize300Px">' +
         '       {{attributeName}}({{attributeType}})' +
-        '       <select id="attributes_{{dynamicId}}_{{attributeName}}"' +
-        '       name="attributes_{{dynamicId}}_{{attributeName}}" ' +
-        '       class="form-control feed-attribute-random-{{dynamicId}}" data-id="{{dynamicId}}"' +
-        '        data-type ="{{attributeType}}"> ' +
-        '          <option value="custom">Custom data based</option>' +
-        '          <option value="primitive">Primitive based</option>' +
-        '          <option value="property">Property based </option>' +
-        '          <option value="regex">Regex based</option>' +
-        '       </select>' +
+        '       <label class="labelSize300Px">' +
+        '           Configuration Type' +
+        '           <select id="attributes_{{dynamicId}}_{{attributeName}}"' +
+        '           name="attributes_{{dynamicId}}_{{attributeName}}" ' +
+        '           class="feed-attribute-random-{{dynamicId}} form-control" data-id="{{dynamicId}}" ' +
+        '           data-type ="{{attributeType}}"> ' +
+        '              <option value="custom">Custom data based</option>' +
+        '              <option value="primitive">Primitive based</option>' +
+        '              <option value="property">Property based </option>' +
+        '              <option value="regex">Regex based</option>' +
+        '           </select>' +
+        '       </label>' +
         '   </label>' +
+        '   <div id ="attributes_{{dynamicId}}_{{attributeName}}_config">' +
+        '   </div> ' +
         '</div>';
 
     var result = "";
@@ -1301,17 +1366,17 @@ generateAttributesListForSource = function (dataType, dynamicId, attributes) {
 //generate success message fro database connection
 generateConnectionMessage = function (dynamicId, status) {
     var connectingMsg =
-        '<div id="connectionSuccessMsg_{{dynamicId}}" class="db-connection-connecting">' +
+        '<div id="connectionSuccessMsg_{{dynamicId}}" class="color-grey">' +
         '<label>Attempting to connect to datasource...</label>' +
         '</div>';
 
     var successMsg =
-        '<div id="connectionSuccessMsg_{{dynamicId}}" class="db-connection-success">' +
+        '<div id="connectionSuccessMsg_{{dynamicId}}" class="color-green">' +
         '<label>Successfully connected</label>' +
         '</div>';
 
     var failureMsg =
-        '<div id="connectionSuccessMsg_{{dynamicId}}" class="db-connection-failure">' +
+        '<div id="connectionSuccessMsg_{{dynamicId}}" class="color-red">' +
         '<label>Connection failed</label>' +
         '</div>';
     switch (status) {
@@ -1340,12 +1405,10 @@ refreshTableNamesFromDataSource = function (connectionDetails, dynamicId) {
 
 // check whether the connection details and table name is available
 verifyConnectionDetails = function (dynamicId) {
-    if ($('#dataSourceLocation_' + dynamicId).val() !== ''
+    return $('#dataSourceLocation_' + dynamicId).val() !== ''
         && $('#driver_' + dynamicId).val() !== ''
         && $('#username_' + dynamicId).val() !== ''
-        && $('#password_' + dynamicId).val() !== '') {
-        return true;
-    }
+        && $('#password_' + dynamicId).val() !== '';
 };
 
 // retrieve column names of the selected table
@@ -1405,5 +1468,152 @@ loadColumnNamesList = function (columnNames, dynamicId) {
     $('#timestampAttribute_' + dynamicId).html(columnsList);
     $('#timestampAttribute_' + dynamicId).prop("selectedIndex", -1);
 };
+
+// generate input fields to provide configuration for random generation type (factory method)
+generateRandomAttributeConfiguration = function (randomType, attributeType, dynamicId, parentId) {
+
+    switch (randomType) {
+        case 'custom' :
+            return generateCustomBasedAttributeConfiguration(dynamicId, parentId);
+        case 'primitive':
+            return generatePrimitiveBasedAttributeConfiguration(attributeType, dynamicId, parentId);
+        case 'property':
+            return generatePropertyBasedAttributeConfiguration(attributeType, dynamicId, parentId);
+        case 'regex' :
+            return generateRegexBasedAttributeConfiguration(dynamicId, parentId);
+    }
+};
+
+// generate input fields to provide configuration for 'custom based' random generation type
+generateCustomBasedAttributeConfiguration = function (dynamicId, parentId) {
+    var custom =
+        '<div>' +
+        '   <label class="labelSize300Px">' +
+        '      Data' +
+        '      <input type="text" class="form-control" name="{{parentId}}_custom" id="{{parentId}}_custom"' +
+        '      data-id="{{dynamicId}}" data-type ="custom">' +
+        '   </label>' +
+        '</div>';
+    var temp = custom.replaceAll('{{dynamicId}}', dynamicId);
+    return temp.replaceAll('{{parentId}}', parentId);
+};
+
+
+// generate input fields to provide configuration for 'primitive based' random generation type
+generatePrimitiveBasedAttributeConfiguration = function (attrType, dynamicId, parentId) {
+
+    var bool =
+        '<div>' +
+        '   <span class="helper color-grey" id="{{parentId}}_primitive_bool" data-id="{{dynamicId}}">' +
+        '   No primitive based configuration required for attribute type \'BOOL\'.' +
+        '   </span>' +
+        '</div>';
+
+    var length =
+        '<div>' +
+        '   <label class="labelSize300Px">' +
+        '       Length' +
+        '       <input type="text" class="form-control" name="{{parentId}}_primitive_length"' +
+        '       id="{{parentId}}_primitive_length" data-id="{{dynamicId}}"' +
+        '       data-type="numeric">' +
+        '   </label>' +
+        '</div>';
+
+    var min =
+        '<div>' +
+        '   <label class="labelSize300Px">' +
+        '      Min' +
+        '      <input type="text" class="form-control" name="{{parentId}}_primitive_min"' +
+        '      id="{{parentId}}_primitive_min" data-id="{{dynamicId}}" data-type="{{attributeType}}">' +
+        '   </label>' +
+        '</div>';
+
+    var max =
+        '<div>' +
+        '   <label class="labelSize300Px">' +
+        '      Max' +
+        '      <input type="text" class="form-control" name="{{parentId}}_primitive_max"' +
+        '      id="{{parentId}}_primitive_max" data-id="{{dynamicId}}" data-type="{{attributeType}}">' +
+        '   </label>' +
+        '</div>';
+
+    var precision =
+        '<div>' +
+        '   <label class="labelSize300Px">' +
+        '      Precision' +
+        '      <input type="text" class="form-control" name="{{parentId}}_primitive_precision"' +
+        '      id="{{parentId}}_primitive_precision" data-id="{{dynamicId}}" data-type="numeric">' +
+        '   </label>' +
+        '</div>';
+
+    var temp = '';
+
+    switch (attrType) {
+        case 'BOOL':
+            temp = bool;
+            break;
+        case 'STRING':
+            temp = length;
+            break;
+        case 'INT':
+        case 'LONG':
+            temp = min;
+            temp += max;
+            break;
+        case 'FLOAT':
+        case 'DOUBLE':
+            temp = min;
+            temp += max;
+            temp += precision;
+            break;
+    }
+    var temp1 = temp.replaceAll('{{dynamicId}}', dynamicId);
+    temp = temp1.replaceAll('{{attributeType}}', attrType.toLowerCase());
+    return temp.replaceAll('{{parentId}}', parentId);
+};
+
+// generate input fields to provide configuration for 'property based' random generation type
+generatePropertyBasedAttributeConfiguration = function (attrType, dynamicId, parentId) {
+    var propertyStartingTag =
+        '<div>' +
+        '   <label class="labelSize300Px">' +
+        '       Type' +
+        '       <select id="{{parentId}}_property" name="{{parentId}}_property" ' +
+        '       class="feed-attribute-random-{{dynamicId}}-property form-control" data-id="{{dynamicId}}"' +
+        '       data-type="property"> ';
+
+    var propertyEndingTag =
+        '      </select>' +
+        '   </label>' +
+        '</div>';
+
+    var temp = propertyStartingTag;
+    temp += refreshPropertyBasedOptionsList(attrType);
+    temp += propertyEndingTag;
+    var temp1 = temp.replaceAll('{{dynamicId}}', dynamicId);
+    return temp1.replaceAll('{{parentId}}', parentId);
+};
+
+//refresh the list of property based random generation options
+refreshPropertyBasedOptionsList = function (attrType) {
+    return generateOptions(propertyBasedGenerationOptions);
+};
+
+// generate input fields to provide configuration for 'regex based' random generation type
+generateRegexBasedAttributeConfiguration = function (dynamicId, parentId) {
+    var regex =
+        '<div>' +
+        '   <label class="labelSize300Px">' +
+        '      Pattern' +
+        '      <input type="text" class="form-control" name="{{parentId}}_regex" id="{{parentId}}_regex"' +
+        ' data-id="{{dynamicId}}" data-type="regex">' +
+        '   </label>' +
+        '</div>';
+
+    var temp = regex.replaceAll('{{dynamicId}}', dynamicId);
+    return temp.replaceAll('{{parentId}}', parentId);
+};
+
+
 
 

@@ -20,7 +20,7 @@
 <!--todo remove the values of dataSourceLocation, driver, username, password-->
     <div class="form-group">
         <label class="labelSize600Px">
-            Data Source Location<span class="requiredAstrix"> *</span>
+            Data Source<span class="requiredAstrix"> *</span>
             <input type="text" class="form-control required-for-db-connection" id="dataSourceLocation_{{dynamicId}}"
                    name="dataSourceLocation_{{dynamicId}}"
             value="jdbc:mysql://localhost:3306/DatabaseFeedSimulation?autoReconnect=true&useSSL=false">
@@ -49,8 +49,11 @@
             <input type="password" class="form-control required-for-db-connection" id="password_{{dynamicId}}"
                    name="password_{{dynamicId}}" value="root">
         </label>
+    </div>
+
+    <div class="form-group">
         <button type="button" class="btn btn-default" id="loadDbConnection_{{dynamicId}}" disabled>
-            Test connection
+            Connect to database
         </button>
         <span class="helper" id="connectionSuccessMsg_{{dynamicId}}"></span>
     </div>
@@ -70,7 +73,7 @@
                        id="timestamp-option_{{dynamicId}}_timestampAttribute">
                 <span class="helper">Timestamp Attribute</span>
                 <select id="timestampAttribute_{{dynamicId}}" class="form-control"
-                        name="timestampAttribute_{{dynamicId}}">
+                        name="timestampAttribute_{{dynamicId}}" disabled>
                 </select>
             </label>
             <label class="custom-radio labelSize200Px">
@@ -84,8 +87,5 @@
     </div>
 
     <div class="form-group" id="attributesDiv_{{dynamicId}}">
-    </div>
-
-    <div class="form-group" id="runDebugButtons_{{dynamicId}}">
     </div>
 </div>
